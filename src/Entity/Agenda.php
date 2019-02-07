@@ -22,115 +22,45 @@ class Agenda extends UnityOfWork {
     protected $id;
 
     /**
-     * @ORM\Column(name="salutation", type="integer", length=1, nullable=true)
-     * @Annotation\Type("Zend\Form\Element\Radio")
-     * @Annotation\Attributes({"class":"form-control"})
-     * @Annotation\Options({
-     * "label": "Aanhef", 
-     * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"},
-     * "value_options":{
-     * "1":"Dhr.",
-     * "2":"Mvr."
-     * }
-     * })
-     */
-    protected $salutation;
-
-    /**
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      * @Annotation\Options({
-     * "label": "Naam",
+     * "label": "Description",
      * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"}
      * })
-     * @Annotation\Attributes({"class":"form-control", "placeholder":"Naam"})
+     * @Annotation\Attributes({"class":"form-control", "placeholder":"title"})
      */
-    protected $name;
-    
-        /**
-     * @ORM\Column(name="agenda", type="string", length=255, nullable=false)
-     * @Annotation\Options({
-     * "label": "E-mail",
-     * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"}
-     * })
-     * @Annotation\Attributes({"class":"form-control", "placeholder":"E-mail"})
-     */
-    protected $agenda;
+    protected $title;
 
     /**
-     * @ORM\Column(name="subject", type="string", length=255, nullable=false)
+     * @ORM\Column(name="description", type="string", length=255, nullable=true)
      * @Annotation\Options({
-     * "label": "Onderwerp",
+     * "label": "Description",
      * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"}
      * })
-     * @Annotation\Attributes({"class":"form-control", "placeholder":"Onderwerp"})
+     * @Annotation\Attributes({"class":"form-control", "placeholder":"description"})
      */
-    protected $subject;
+    protected $description;
 
     /**
-     * @ORM\Column(name="message", type="text", nullable=false)
+     * @ORM\Column(name="date", type="date", nullable=false)
      * @Annotation\Options({
-     * "label": "Bericht",
+     * "label": "Date",
      * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"}
      * })
-     * @Annotation\Attributes({"class":"form-control"})
+     * @Annotation\Attributes({"class":"form-control", "placeholder":"date"})
      */
-    protected $message;
+    protected $date;
 
-    
-    function getId() {
-        return $this->id;
-    }
+    /**
+     * @ORM\Column(name="time", type="time", nullable=true)
+     * @Annotation\Options({
+     * "label": "Date",
+     * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"}
+     * })
+     * @Annotation\Attributes({"class":"form-control", "placeholder":"date"})
+     */
+    protected $time;
 
-    function getSalutation() {
-        
-        if($this->salutation == 1){
-            return 'De heer';
-        } else if ($this->salutation == 2){
-            return 'Mevrouw';
-        } else {
-            return 'Onbekend';
-        }
-    }
-
-    function getName() {
-        return $this->name;
-    }
-
-    function getEmail() {
-        return $this->agenda;
-    }
-
-    function getSubject() {
-        return $this->subject;
-    }
-
-    function getMessage() {
-        return $this->message;
-    }
-
-    function setId($id) {
-        $this->id = $id;
-    }
-
-    function setSalutation($salutation) {
-        $this->salutation = $salutation;
-    }
-
-    function setName($name) {
-        $this->name = $name;
-    }
-
-    function setEmail($agenda) {
-        $this->agenda = $agenda;
-    }
-
-    function setSubject($subject) {
-        $this->subject = $subject;
-    }
-
-    function setMessage($message) {
-        $this->message = $message;
-    }
 
 
 }
