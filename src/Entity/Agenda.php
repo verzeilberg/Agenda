@@ -8,12 +8,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\UnityOfWork;
 
 /**
- * This class represents a agenda item.
+ * This class represents a agenda.
  * @ORM\Entity()
  * @ORM\Table(name="agenda")
  */
 class Agenda extends UnityOfWork {
-
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="integer", length=11)
@@ -32,35 +31,30 @@ class Agenda extends UnityOfWork {
     protected $title;
 
     /**
-     * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @ORM\Column(name="whole_day", type="integer", length=1,  nullable=true)
+     * @Annotation\Type("Zend\Form\Element\Checkbox")
      * @Annotation\Options({
-     * "label": "Description",
-     * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"}
+     * "label": "Gehele dag",
+     * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"},
+     * "value_options":{
+     * "1":"Publiek."
+     * }
      * })
-     * @Annotation\Attributes({"class":"form-control", "placeholder":"description"})
+     * @Annotation\Attributes({"class":"form-control"})
      */
-    protected $description;
+    protected $public;
 
     /**
-     * @ORM\Column(name="date", type="date", nullable=false)
-     * @Annotation\Options({
-     * "label": "Date",
-     * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"}
-     * })
-     * @Annotation\Attributes({"class":"form-control", "placeholder":"date"})
+     * Many Users have Many Groups.
+     * @ORM\ManyToMany(targetEntity="User\Entity\User")
+     * @ORM\JoinTable(name="agendas_users",
+     *      joinColumns={@ORM\JoinColumn(name="agenda_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     *      )
      */
-    protected $date;
+    private $users;
 
-    /**
-     * @ORM\Column(name="time", type="time", nullable=true)
-     * @Annotation\Options({
-     * "label": "Date",
-     * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"}
-     * })
-     * @Annotation\Attributes({"class":"form-control", "placeholder":"date"})
-     */
-    protected $time;
-
-
-
+    public function __construct() {
+        $this->users = new ArrayCollection();
+    }
 }

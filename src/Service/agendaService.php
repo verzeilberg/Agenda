@@ -10,7 +10,7 @@ use Zend\Mime\Message as MimeMessage;
 /*
  * Entities
  */
-use Agenda\Entity\Agenda;
+use Agenda\Entity\AgendaItem;
 
 class agendaService implements agendaServiceInterface {
 
@@ -30,7 +30,7 @@ class agendaService implements agendaServiceInterface {
      */
     public function getAgendas() {
 
-        $agendas = $this->entityManager->getRepository(Agenda::class)
+        $agendas = $this->entityManager->getRepository(AgendaItem::class)
                 ->findBy([], ['dateCreated' => 'DESC']);
         
         return $agendas;
@@ -45,7 +45,7 @@ class agendaService implements agendaServiceInterface {
      *
      */
     public function getAgendaFormById($id) {
-        $agendaForm = $this->entityManager->getRepository(Agenda::class)
+        $agendaForm = $this->entityManager->getRepository(AgendaItem::class)
                 ->findOneBy(['id' => $id], []);
 
         return $agendaForm;
@@ -67,7 +67,7 @@ class agendaService implements agendaServiceInterface {
      *
      * Send mail
      * 
-     * @param       agenda $agenda object
+     * @param       AgendaItem $agenda object
      * @return      void
      *
      */
