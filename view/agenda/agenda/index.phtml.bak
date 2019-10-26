@@ -1,0 +1,35 @@
+<?php
+$this->mainMenu()->setActiveItemId('agenda');
+$this->pageBreadcrumbs()->setLayout('beheer');
+$this->pageBreadcrumbs()->setItems([
+    'Beheer' => $this->url('beheer'),
+    'Agenda' => $this->url('beheer/agenda'),
+]);
+?>
+<hgroup id="headAdminTitle" class="col-sm-12 col-md-12 col-lg-12">
+    <h1 id="index">AGENDA BEHEER</h1>
+</hgroup>
+<!-- Breadcrumbs -->
+<div class="col-lg-12 col-md-12 col-sm-12">
+    <?= $this->pageBreadcrumbs()->render(); ?>
+</div>
+<div class="col-lg-12 col-md-12 col-sm-12">
+
+    <?= $this->agendaViewHelper()->show($year, $month); ?>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $(".day > span, .week > span").on("click", function(e){
+            e.preventDefault();
+            if($(this).hasClass('selected')) {
+                var link = $(this).data('link');
+                window.location.href = link;
+            }
+            $('.day span, .week span').removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+
+    });
+</script>

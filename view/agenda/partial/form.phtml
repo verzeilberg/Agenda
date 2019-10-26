@@ -1,0 +1,37 @@
+<div class="form-check">
+    <?= $this->formCheckbox($form->get('wholeDay')); ?>
+    <?php echo $this->formLabel($form->get('wholeDay')); ?>
+    <?php if (count($form->getMessages('wholeDay')) > 0) { ?>
+        <small class="form-text text-danger"><?php echo $this->formElementErrors($form->get('wholeDay')); ?></small>
+    <?php } ?>
+</div>
+<div class="form-group row mt-2">
+    <div class="col text-center">
+        <?php echo $this->formText($form->get('startDate')); ?>
+    </div>
+    <div class="col text-center">
+        <?php echo $this->formText($form->get('endDate')); ?>
+    </div>
+</div>
+<div class="form-group row mt-2">
+    <div class="col text-center">
+        <?php echo $this->formHidden($form->get('startTime')); ?>
+    </div>
+    <div class="col text-center">
+        <?php echo $this->formHidden($form->get('endTime')); ?>
+    </div>
+</div>
+<div class="form-group">
+    <?php echo $this->formLabel($form->get('title')); ?>
+        <?= $this->formText($form->get('title')); ?>
+    <?php if (count($form->getMessages('title')) > 0) { ?>
+        <small class="form-text text-danger"><?php echo $this->formElementErrors($form->get('title')); ?></small>
+    <?php } ?>
+</div>
+<div class="form-group">
+    <?php echo $this->formLabel($form->get('description')); ?>
+        <?= $this->formTextarea($form->get('description')); ?>
+    <?php if (count($form->getMessages('description')) > 0) { ?>
+        <small class="form-text text-danger"><?php echo $this->formElementErrors($form->get('description')); ?></small>
+    <?php } ?>
+</div>

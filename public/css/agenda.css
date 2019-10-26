@@ -1,0 +1,120 @@
+/*-----------------------------------------*/
+.calendarColLeft {
+    padding-right: 0!important;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.calendarColRight {
+    padding-left:0 !important;
+}
+
+.calendarColRight button#addAgendaItem {
+    position:absolute;
+    right:0;
+    bottom:0;
+    border-radius: 0 0 6px 0;
+}
+
+div.dateContent {
+    background-color: #E76642;
+    border-radius: 0 6px 6px 0;
+    min-height: 100%;
+    padding:10px 30px;
+    position:relative;
+}
+
+table tbody tr th {
+    border-top:none !important;
+    font-weight: lighter;
+    text-align: center;
+}
+
+table tbody tr.orange th {
+    color: #E76642 !important;
+
+}
+
+table tbody tr.white th {
+    color:#fff !important;
+}
+
+#date{
+    font-size:50px;
+    color:#ECECE7;
+    font-family: 'Montserrat', sans-serif;
+    font-weight:500;
+}
+#day{
+    font-size:30px;
+    color:#232227;
+    font-family: 'Montserrat', sans-serif;
+    font-weight:400;
+}
+#month{
+    font-size:26px;
+    color:#232227;
+    font-family: 'Montserrat', sans-serif;
+    font-weight:200;
+}
+
+span.dateLink,
+span.weekLink {
+    display:inline-block;
+    text-align: center;
+    width:100%;
+    height:100%;
+    min-width: 100%;
+    min-height:100%;
+    padding:10px 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+span.dateLink:hover,
+span.weekLink:hover {
+    background-color: #E76642;
+}
+
+span.selected,
+span.selected:hover{
+    background-color: #ffc100;
+}
+
+button#agendaLayout {
+    text-transform: capitalize;
+}
+
+/* Dropdown layout */
+.dropdown-item.active, .dropdown-item:active {
+    background-color:#E76642 !important;
+}
+
+/* Add agenda item modal */
+#addAgendaItem .modal-dialog .modal-content {
+    background-color: #E76642;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#addAgendaItem .modal-dialog .modal-content .modal-footer {
+    border-top:0 !important;
+    min-height:40px;
+}
+
+h5.modal-title {
+    color:#ECECE7;
+    font-family: 'Montserrat', sans-serif;
+}
+
+button#submitAgendaItem {
+    position: absolute;
+    bottom: 0;
+    left:0;
+    border-radius: 0 0 0 6px;
+}
+
+button#closeAddAgendaItem {
+    position: absolute;
+    bottom: 0;
+    right:0;
+    border-radius: 0 0 6px 0;
+}

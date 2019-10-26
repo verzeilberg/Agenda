@@ -1,0 +1,35 @@
+div.calendar-placeholder {
+    border-radius: 6px;
+    border: 1px solid #cccccc;
+    width: 100%;
+    position: absolute;
+    background-color: #ffffff;
+    z-index: 9;
+    min-height: 200px;
+}
+
+h3#monthAndYear {
+    color: #000000;
+    font-weight: 500;
+    font-size: 18px;
+    padding: 5px 0;
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+}
+
+span#next,
+span#previous {
+    cursor: pointer;
+}
+
+table#calendar {
+    font-family: 'Montserrat', sans-serif;
+}
+
+table#calendar thead tr th {
+    font-size: 10px;
+}
+
+td.selectDate {
+    cursor: pointer;
+}

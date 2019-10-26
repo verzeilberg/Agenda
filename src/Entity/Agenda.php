@@ -24,7 +24,7 @@ class Agenda extends UnityOfWork {
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      * @Annotation\Options({
      * "label": "Description",
-     * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"}
+     * "label_attributes": {"class": "col form-control-label"}
      * })
      * @Annotation\Attributes({"class":"form-control", "placeholder":"title"})
      */

@@ -1,0 +1,126 @@
+/* Digi font */
+
+@font-face {
+    font-family: 'ds-digitalnormal';
+    src: url('digi-font/ds-digi-webfont.woff2') format('woff2'),
+    url('digi-font/ds-digi-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'ds-digitalbold_italic';
+    src: url('digi-font/ds-digit-webfont.woff2') format('woff2'),
+    url('digi-font/ds-digit-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'ds-digitalitalic';
+    src: url('digi-font/ds-digii-webfont.woff2') format('woff2'),
+    url('digi-font/ds-digii-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'ds-digitalbold';
+    src: url('digi-font/ds-digib-webfont.woff2') format('woff2'),
+    url('digi-font/ds-digib-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.timeshift-placeholder {
+    height:35px;
+    max-height: 35px;
+    min-height: 35px;
+    overflow-y: hidden;
+    background-clip: padding-box;
+    width:200px;
+    margin:auto;
+}
+
+#minutes,
+.hoursElement,
+#seconds {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 35px;
+    min-height: 35px;
+    max-height: 35px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 33.3333333333%;
+    display: block;
+    float:left;
+
+    background-color: #fff;
+}
+
+.hoursElement {
+    border-radius: 0.25rem 0 0 0.25rem;
+    border-left:1px solid #ced4da;
+    border-top:1px solid #ced4da;
+    border-bottom:1px solid #ced4da;
+}
+
+#minutes {
+    border-radius:  0 0.25rem 0.25rem 0;
+    border-right:1px solid #ced4da;
+    border-top:1px solid #ced4da;
+    border-bottom:1px solid #ced4da;
+}
+
+#seconds {
+     border-radius:  0 0.25rem 0.25rem 0;
+     border-right:1px solid #ced4da;
+     border-top:1px solid #ced4da;
+     border-bottom:1px solid #ced4da;
+ }
+
+.timeItem {
+    height: 35px;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: center;
+    line-height: 35px;
+    color:#000000;
+    font-size: 2em;
+    font-family: 'ds-digitalitalic';
+    -webkit-box-shadow: inset 0px 0px 75px -46px rgba(0,0,0,0.58);
+    -moz-box-shadow: inset 0px 0px 75px -46px rgba(0,0,0,0.58);
+    box-shadow: inset 0px 0px 75px -46px rgba(0,0,0,0.58);
+}
+
+#minutes::-webkit-scrollbar,
+.hoursElement::-webkit-scrollbar,
+#seconds::-webkit-scrollbar {
+    display: none;
+}
+
+.legend-placeholder {
+    margin:auto;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.legend-placeholder .legend-item {
+    width: 50%;
+    text-align: center;
+    flex-basis: 0;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    max-width: 100%;
+    position: relative;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+

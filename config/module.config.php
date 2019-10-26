@@ -10,18 +10,27 @@ use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 return [
     'controllers' => [
         'factories' => [
-            Controller\AgendaController::class => Factory\AgendaControllerFactory::class,
+            Controller\AgendaController::class => Controller\Factory\AgendaControllerFactory::class,
+            Controller\AgendaAjaxController::class => Controller\Factory\AgendaAjaxControllerFactory::class
         ],
         'aliases' => [
             'agendabeheer' => Controller\AgendaController::class,
+            'agendaAjax' => Controller\AgendaAjaxController::class,
         ],
     ],
     'service_manager' => [
         'invokables' => [
-            'Agenda\Service\agendaServiceInterface' => 'Agenda\Service\agendaService'
+            Agenda\Service\AgendaServiceInterface::class => Agenda\Service\AgendaService::class
         ],
     ],
-    // The following section is new and should be added to your file
+    'view_helpers' => [
+        'factories' => [
+            View\Helper\AgendaHelper::class => View\Helper\Factory\AgendaViewHelperFactory::class,
+        ],
+        'aliases' => [
+            'agendaViewHelper' => View\Helper\AgendaHelper::class,
+        ],
+    ],
     'router' => [
         'routes' => [
             'agenda' => [
@@ -38,6 +47,19 @@ return [
                     ],
                 ],
             ],
+            'agendaAjax' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/agenda-ajax[/:action][/:id]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'agendaAjax',
+                    ],
+                ],
+            ]
         ],
     ],
     'view_manager' => [
@@ -50,6 +72,10 @@ return [
     'access_filter' => [
         'controllers' => [
             'agendabeheer' => [
+                // to anyone.
+                ['actions' => '*', 'allow' => '+agenda.manage']
+            ],
+            'agendaAjax' => [
                 // to anyone.
                 ['actions' => '*', 'allow' => '+agenda.manage']
             ],
@@ -68,5 +94,12 @@ return [
                 ]
             ]
         ]
+    ],
+    'asset_manager' => [
+        'resolver_configs' => [
+            'paths' => [
+                __DIR__ . '/../public',
+            ],
+        ],
     ],
 ];
