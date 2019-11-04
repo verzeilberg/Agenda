@@ -61,8 +61,9 @@
         function isValidDate(dateString)
         {
             var regexs = [
-                /^(y{4}m{2}d{2})\b/gm,
-                /^(y{4}-m{2}-d{2})\b/gm
+                /^(y{4}m{2}d{2})\b/gm, //yyyymmdd
+                /^(y{4}-m{2}-d{2})\b/gm, //yyyy-mm-dd
+                /^(y{4}\/m{2}\/d{2})\b/gm //yyyy-mm-dd
             ];
 
             $.each(regexs, function( index, regex ) {
