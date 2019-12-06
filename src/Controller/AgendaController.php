@@ -59,10 +59,13 @@ class AgendaController extends AbstractActionController {
         $form = $this->agendaService->createAgendaItemForm($agendaItem);
 
         $currentDate = new DateTime();
+
         if ($year == null OR $month == null) {
             $selectedMonthYear = $currentDate;
+            $firstDayOfTheMonth = new DateTime('first day of this month');
         } else {
             $selectedMonthYear = new DateTime($year.'-'.$month.'-1');
+            $firstDayOfTheMonth = new DateTime($year.'-'.$month.'-1');
         }
         $weeksInMonth = $this->agendaService->weeksInMonth(
             $selectedMonthYear->format('m'),
@@ -81,6 +84,7 @@ class AgendaController extends AbstractActionController {
             'month' => $month,
             'year' => $year,
             'currentDate' => $currentDate,
+            'firstDayOfTheMonth' => $firstDayOfTheMonth,
             'selectedMonthYear' => $selectedMonthYear,
             'weeksInMonth' => $weeksInMonth,
             'navigationLinks' => $navigationLinks,

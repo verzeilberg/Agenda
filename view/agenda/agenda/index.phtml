@@ -59,7 +59,7 @@ $this->pageBreadcrumbs()->setItems([
                         <th><?= $dayLabel; ?></th>
                     <?php } ?>
                 </tr>
-                <?php $currentDay = 0; ?>
+                <?php $dayCount = 1; ?>
                 <?php for ($i = 0; $i < $weeksInMonth; $i++) { ?>
                     <?php
                     $weekNumber = $this->agendaViewHelper()->getWeekNumber(
@@ -84,14 +84,18 @@ $this->pageBreadcrumbs()->setItems([
 
                         for ($j = 1; $j <= 7; $j++) { ?>
                             <?php
-                            $day = $this->agendaViewHelper()->showDay(
-                                $selectedMonthYear->format('m'),
-                                $selectedMonthYear->format('Y'),
-                                $i * 7 + $j,
-                                $currentDay
+                            $day = null;
 
-                            );
-                            $currentDay = (int)$i * 7 + (int)$j;
+                            if(($i == 0 && $j >= $firstDayOfTheMonth->format('N')) || ((int)$i > 0)) {
+                                $day = $this->agendaViewHelper()->showDay(
+                                    $selectedMonthYear->format('m'),
+                                    $selectedMonthYear->format('Y'),
+                                    $dayCount
+                                );
+                                $dayCount++;
+                            }
+
+
                             ?>
                             <?php if (is_object($day)) { ?>
                                 <th>
@@ -221,7 +225,7 @@ $this->pageBreadcrumbs()->setItems([
             hourClock: 24
         });
 
-        $( "input[name=startDate], input[name=endDate]" ).dateshift({
+        $( "input[name=startDate]" ).dateshift({
             preappelement: '<i class="far fa-calendar-alt"></i>',
             preapp: 'app',
             nextButtonText: '<i class="far fa-caret-square-right"></i>',

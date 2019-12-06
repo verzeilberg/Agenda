@@ -21,28 +21,21 @@ class AgendaHelper extends AbstractHelper
     }
 
     /**
-     * Create the day in the calendar
-     * @param string $currentMonth
-     * @param string $currentYear
-     * @param string $cellNumber
-     * @return string
+     * @param $currentMonth
+     * @param $currentYear
+     * @param $dayCount
+     * @param $currentDay
+     * @return DateTime|null
+     * @throws \Exception
      */
-    public function showDay($currentMonth, $currentYear, $cellNumber, $currentDay)
+    public function showDay($currentMonth, $currentYear, $dayCount)
     {
-        if ($currentDay == 0) {
-            $firstDayOfTheWeek = date('N', strtotime($currentYear . '-' . $currentMonth . '-01'));
-            if (intval($cellNumber) == $firstDayOfTheWeek) {
-                $currentDay = 1;
+            if ($dayCount <= $this->agendaService->daysInMonth($currentMonth, $currentYear)) {
+                $cellContent = $dayCount;
+                return new DateTime($currentYear . '-' . $currentMonth . '-' . $cellContent);
+            } else {
+                return null;
             }
-        }
-        if (($currentDay != 0) &&
-            ($currentDay <= $this->agendaService->daysInMonth($currentMonth, $currentYear))) {
-            $cellContent = $currentDay;
-            $currentDay++;
-            return new DateTime($currentYear . '-' . $currentMonth . '-' . $cellContent);
-        } else {
-            return null;
-        }
     }
 
 
