@@ -37,13 +37,13 @@
 }
 
 .timeshift-placeholder {
-    height:35px;
+    height: 35px;
     max-height: 35px;
     min-height: 35px;
     overflow-y: hidden;
     background-clip: padding-box;
-    width:200px;
-    margin:auto;
+    width: 200px;
+    margin: auto;
 }
 
 #minutes,
@@ -59,31 +59,31 @@
     padding: 0;
     width: 33.3333333333%;
     display: block;
-    float:left;
+    float: left;
 
     background-color: #fff;
 }
 
 .hoursElement {
     border-radius: 0.25rem 0 0 0.25rem;
-    border-left:1px solid #ced4da;
-    border-top:1px solid #ced4da;
-    border-bottom:1px solid #ced4da;
+    border-left: 1px solid #ced4da;
+    border-top: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
 }
 
 #minutes {
-    border-radius:  0 0.25rem 0.25rem 0;
-    border-right:1px solid #ced4da;
-    border-top:1px solid #ced4da;
-    border-bottom:1px solid #ced4da;
+    border-radius: 0 0.25rem 0.25rem 0;
+    border-right: 1px solid #ced4da;
+    border-top: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
 }
 
 #seconds {
-     border-radius:  0 0.25rem 0.25rem 0;
-     border-right:1px solid #ced4da;
-     border-top:1px solid #ced4da;
-     border-bottom:1px solid #ced4da;
- }
+    border-radius: 0 0.25rem 0.25rem 0;
+    border-right: 1px solid #ced4da;
+    border-top: 1px solid #ced4da;
+    border-bottom: 1px solid #ced4da;
+}
 
 .timeItem {
     height: 35px;
@@ -91,12 +91,12 @@
     width: 100%;
     text-align: center;
     line-height: 35px;
-    color:#000000;
+    color: #000000;
     font-size: 2em;
     font-family: 'ds-digitalitalic';
-    -webkit-box-shadow: inset 0px 0px 75px -46px rgba(0,0,0,0.58);
-    -moz-box-shadow: inset 0px 0px 75px -46px rgba(0,0,0,0.58);
-    box-shadow: inset 0px 0px 75px -46px rgba(0,0,0,0.58);
+    -webkit-box-shadow: inset 0px 0px 75px -46px rgba(0, 0, 0, 0.58);
+    -moz-box-shadow: inset 0px 0px 75px -46px rgba(0, 0, 0, 0.58);
+    box-shadow: inset 0px 0px 75px -46px rgba(0, 0, 0, 0.58);
 }
 
 #minutes::-webkit-scrollbar,
@@ -106,7 +106,7 @@
 }
 
 .legend-placeholder {
-    margin:auto;
+    margin: auto;
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;

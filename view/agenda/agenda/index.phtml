@@ -221,11 +221,12 @@ $this->pageBreadcrumbs()->setItems([
             hourClock: 24
         });
 
-        $( "input[name=startDate]" ).dateshift({
+        $( "input[name=startDate], input[name=endDate]" ).dateshift({
             preappelement: '<i class="far fa-calendar-alt"></i>',
             preapp: 'app',
             nextButtonText: '<i class="far fa-caret-square-right"></i>',
-            previousButtonText: '<i class="far fa-caret-square-left"></i>'
+            previousButtonText: '<i class="far fa-caret-square-left"></i>',
+            dateFormat: 'dd-mm-yyyy'
         });
 
 
