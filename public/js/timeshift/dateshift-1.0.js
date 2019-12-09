@@ -79,13 +79,13 @@
          * @type {*[]}
          */
         var dayLabels = [
-            "Zon",
-            "Maa",
-            "Din",
-            "Woe",
-            "Don",
-            "Vrij",
-            "Zat"
+            "M",
+            "D",
+            "W",
+            "D",
+            "V",
+            "Z",
+            "Z"
         ];
 
         /**
@@ -99,6 +99,20 @@
             } else {
                 return '0' + datePart;
             }
+        }
+
+        function getWeekNumber(d) {
+            // Copy date so don't modify original
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            // Set to nearest Thursday: current date + 4 - current day number
+            // Make Sunday's day number 7
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+            // Get first day of year
+            var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+            // Calculate full weeks to nearest Thursday
+            var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+            // Return array of year and week number
+            return [d.getUTCFullYear(), weekNo];
         }
 
         /**
@@ -139,15 +153,66 @@
         var currentMonth = today.getMonth() + 1;
         var currentYear = today.getFullYear();
 
-        function daysInMonth(iMonth, iYear) {
-            return 32 - new Date(iYear, iMonth, 32).getDate();
+        /**
+         * Calculate days in the goven month and year
+         * @param iMonth
+         * @param iYear
+         * @returns {number}
+         */
+        function daysInMonth(month, year) {
+            return 32 - new Date(year, month, 32).getDate();
         }
 
 
+        /**
+         * Get the Dutch number day. Because monday is 0
+         * @param numberDay
+         * @returns {number}
+         */
+        function getDutchNumberDay(numberDay)
+        {
+            switch(numberDay) {
+                case 0:
+                    return 6;
+                case 1:
+                    return 0;
+                case 2:
+                    return 1;
+                case 3:
+                    return 2;
+                case 4:
+                    return 3;
+                case 5:
+                    return 4;
+                case 6:
+                    return 5;
+            }
+        }
+
+        /**
+         * Create the calendar
+         * @param month
+         * @param year
+         * @param calendarBody
+         * @returns {*}
+         */
         function showCalendar(month, year, calendarBody) {
 
-            var firstDay = (new Date(year, month)).getDay();
-console.log('firstDay: ', firstDay);
+            //Create date object of the first day of the month
+            var startDate = new Date(year + '-' + month + '-1');
+            //Get the number of the specific day: 0:Sunday, 1:Monday, 2 Tuesday etc.
+            var startNumberDay = startDate.getDay();
+            //Get the first weeknumber
+            var firstWeeknumber = getWeekNumber(startDate);
+            var lastDayOfTheMonth = new Date(year, month + 1, 0);
+            console.log('lastDayOfTheMonth: ', lastDayOfTheMonth);
+
+            var lastWeekNumber = getWeekNumber(lastDayOfTheMonth);
+            startNumberDay = getDutchNumberDay(startNumberDay);
+
+            console.log('firstWeeknumber: ', firstWeeknumber);
+            console.log('lastWeekNumber: ', lastWeekNumber);
+
             // clearing all previous cells
             $(calendarBody).empty();
             $('h3#monthAndYear').html(months[month] + ' ' + year);
@@ -159,13 +224,16 @@ console.log('firstDay: ', firstDay);
                 var row = $('<tr>');
                 //creating individual cells, filing them up with data.
                 for (var j = 0; j < 7; j++) {
-                    if (i === 0 && j < firstDay) {
+                    if(i === 0 && j < startNumberDay) {
+
                         var cell = $('<td>');
                         cell.append('&nbsp;');
                         row.append(cell);
                     }
                     else if (date > daysInMonth(month, year)) {
-                        break;
+                        var cell = $('<td>');
+                        cell.append('&nbsp;');
+                        row.append(cell);
                     }
                     else {
                         var cell = $('<td class="selectDate" date="'+getDateByFormat(date, month, year)+'">');
@@ -183,12 +251,17 @@ console.log('firstDay: ', firstDay);
                         date++;
                     }
                 }
-
                 calendarBody.append(row); // appending each row into calendar body.
             }
             return calendarBody;
         }
 
+        /**
+         * When clicking on next button set the right month and year in calender
+         * @param currentYear
+         * @param currentMonth
+         * @param calendarTableBody
+         */
         function next(currentYear, currentMonth, calendarTableBody) {
             currentMonth = parseInt(currentMonth);
             currentYear = parseInt(currentYear);
@@ -199,6 +272,12 @@ console.log('firstDay: ', firstDay);
             showCalendar(currentMonth, currentYear, calendarTableBody);
         }
 
+        /**
+         * When clicking on previous button set the right month and year in calender
+         * @param currentYear
+         * @param currentMonth
+         * @param calendarTableBody
+         */
         function previous(currentYear, currentMonth, calendarTableBody) {
             currentMonth = parseInt(currentMonth);
             currentYear = parseInt(currentYear);
@@ -223,7 +302,7 @@ console.log('firstDay: ', firstDay);
         var row = $('<tr>');
 
         $.each(dayLabels, function(index, label){
-            row.append($('<th>').html(index + ' : ' +label));
+            row.append($('<th>').html(label));
         });
         calendarTableThead.append(row);
         calendarTable.append(calendarTableThead);
