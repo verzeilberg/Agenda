@@ -46,9 +46,9 @@
     margin: auto;
 }
 
-#minutes,
+.minutesElement,
 .hoursElement,
-#seconds {
+.secondsElement {
     overflow-x: hidden;
     overflow-y: auto;
     height: 35px;
@@ -60,8 +60,10 @@
     width: 33.3333333333%;
     display: block;
     float: left;
-
+    text-align: center;
     background-color: #fff;
+    font-size: 2em;
+    font-family: 'ds-digitalitalic';
 }
 
 .hoursElement {
@@ -71,38 +73,17 @@
     border-bottom: 1px solid #ced4da;
 }
 
-#minutes {
-    border-radius: 0 0.25rem 0.25rem 0;
-    border-right: 1px solid #ced4da;
+.minutesElement {
+    border-radius: 0;
     border-top: 1px solid #ced4da;
     border-bottom: 1px solid #ced4da;
 }
 
-#seconds {
+.secondsElement {
     border-radius: 0 0.25rem 0.25rem 0;
     border-right: 1px solid #ced4da;
     border-top: 1px solid #ced4da;
     border-bottom: 1px solid #ced4da;
-}
-
-.timeItem {
-    height: 35px;
-    box-sizing: border-box;
-    width: 100%;
-    text-align: center;
-    line-height: 35px;
-    color: #000000;
-    font-size: 2em;
-    font-family: 'ds-digitalitalic';
-    -webkit-box-shadow: inset 0px 0px 75px -46px rgba(0, 0, 0, 0.58);
-    -moz-box-shadow: inset 0px 0px 75px -46px rgba(0, 0, 0, 0.58);
-    box-shadow: inset 0px 0px 75px -46px rgba(0, 0, 0, 0.58);
-}
-
-#minutes::-webkit-scrollbar,
-.hoursElement::-webkit-scrollbar,
-#seconds::-webkit-scrollbar {
-    display: none;
 }
 
 .legend-placeholder {
@@ -123,4 +104,3 @@
     padding-right: 15px;
     padding-left: 15px;
 }
-

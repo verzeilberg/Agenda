@@ -52,6 +52,7 @@ class AgendaController extends AbstractActionController {
         $this->viewhelpermanager->get('headLink')->appendStylesheet('/css/timeshift/dateshift-1.0.css');
         $this->viewhelpermanager->get('headScript')->appendFile('/js/timeshift/timeshift-1.0.js');
         $this->viewhelpermanager->get('headScript')->appendFile('/js/timeshift/dateshift-1.0.js');
+        $this->viewhelpermanager->get('headScript')->appendFile('/js/agenda.js');
         $year = (int)$this->params()->fromQuery('year', null);
         $month = (int)$this->params()->fromQuery('month', null);
 
@@ -61,7 +62,7 @@ class AgendaController extends AbstractActionController {
         $currentDate = new DateTime();
 
         if ($year == null OR $month == null) {
-            $selectedMonthYear = $currentDate;
+            $selectedMonthYear =  clone $currentDate;
             $firstDayOfTheMonth = new DateTime('first day of this month');
         } else {
             $selectedMonthYear = new DateTime($year.'-'.$month.'-1');
@@ -77,25 +78,28 @@ class AgendaController extends AbstractActionController {
             $selectedMonthYear->format('Y')
         );
 
-
-
+        $agendaItems = $this->agendaService->agendaItemRepository->getAgendaItemsByMonth($selectedMonthYear);
+        $agendaItemsForCurrentDate = $this->agendaService->agendaItemRepository->getAgendaItemsByDay($currentDate);
 
         return new ViewModel([
             'month' => $month,
             'year' => $year,
             'currentDate' => $currentDate,
+            'agendaItemsForCurrentDate' => $agendaItemsForCurrentDate,
             'firstDayOfTheMonth' => $firstDayOfTheMonth,
             'selectedMonthYear' => $selectedMonthYear,
             'weeksInMonth' => $weeksInMonth,
             'navigationLinks' => $navigationLinks,
             'dayLabels' => $dayLabels,
             'layout' => 'month',
-            'form' => $form
+            'form' => $form,
+            'agendaItems' => $agendaItems
         ]);
     }
 
     public function dayAction()
     {
+        $this->viewhelpermanager->get('headLink')->appendStylesheet('/css/agenda.css');
         $day = (int)$this->params()->fromRoute('day', null);
 
         if ($day == null){
@@ -104,15 +108,22 @@ class AgendaController extends AbstractActionController {
             $date = $this->agendaService->checkDayDate($day);
         }
 
+        $agendaItems = $this->agendaService->agendaItemRepository->getAgendaItemsByDay($date);
+
+
+
+        $twentyFourHours = $this->agendaService->getTwentyFourHours();
+
         return new ViewModel([
-            'date' => $date
+            'date' => $date,
+            'twentyFourHours' => $twentyFourHours,
+            'agendaItems' => $agendaItems
         ]);
 
     }
     public function weekAction()
     {
         $weekNr = (int)$this->params()->fromRoute('day', null);
-
         return new ViewModel([
 
         ]);

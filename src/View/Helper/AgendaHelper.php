@@ -89,4 +89,19 @@ class AgendaHelper extends AbstractHelper
 
         return $weekNumber;
     }
+
+    /**
+     * Shorten title to fit in agenda box
+     * @param $title
+     * @return string
+     */
+    public function shortenTitle($title)
+    {
+        if(strlen($title) > 30)
+        {
+            $title = trim(substr($title, 0, 30))."&hellip;";
+        }
+
+        return $title;
+    }
 }

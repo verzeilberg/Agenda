@@ -47,7 +47,7 @@ class AgendaItem extends UnityOfWork {
      * "label": "Start date",
      * "label_attributes": {"class": "col"}
      * })
-     * @Annotation\Attributes({"class":"form-control", "placeholder":"start date"})
+     * @Annotation\Attributes({"class":"form-control", "required":"required", "placeholder":"start date"})
      */
     protected $startDate;
 
@@ -57,7 +57,7 @@ class AgendaItem extends UnityOfWork {
      * "label": "End date",
      * "label_attributes": {"class": "col form-control-label"}
      * })
-     * @Annotation\Attributes({"class":"form-control", "placeholder":"end date"})
+     * @Annotation\Attributes({"class":"form-control", "required":"required", "placeholder":"end date"})
      */
     protected $endDate;
 

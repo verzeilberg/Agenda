@@ -1,5 +1,11 @@
-(function($) {
-    $.fn.timeshift = function(options) {
+(function ($) {
+    $.fn.timeshift = function (options) {
+
+
+        var currentDate = new Date();
+        var currentHours = currentDate.getHours();
+        var currentMinutes = currentDate.getMinutes();
+        var currentSeconds = currentDate.getSeconds();
 
         var defaults = {
             height: 35,
@@ -16,7 +22,9 @@
             secondLegend: 'S',
             nameHiddenInputElement: 'timeValue',
             idHiddenInputElement: 'timeValue',
-            startTime: '00:00:00'
+            startHour: 0,
+            startMinutes: 0,
+            startSeconds: 0
         };
 
 
@@ -24,7 +32,7 @@
          * Filter options. Compare them with the default ones and only use the defailt settings
          */
         var filteredOptions = {};
-        $.each(options, function(index, value) {
+        $.each(options, function (index, value) {
             if (index in defaults === true) {
                 filteredOptions[index] = value;
             }
@@ -35,20 +43,23 @@
         var settings = $.extend({}, defaults, filteredOptions);
 
 
-
         /*
          * Create a timesheet index is 24 clock value is 12 clock
          */
         var timeSheet = {
-            0: 12,1: 1,2: 2,3: 3,4: 4,5: 5,6: 6,7: 7,8: 8,9: 9,10: 10,
-            11: 11,12: 12,13: 1,14: 2,15: 3,16: 4,17: 5,18: 6,19: 7,20: 8,
-            21: 9,22: 10,23: 11
+            0: 12, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10,
+            11: 11, 12: 12, 13: 1, 14: 2, 15: 3, 16: 4, 17: 5, 18: 6, 19: 7, 20: 8,
+            21: 9, 22: 10, 23: 11
         };
 
         /*
              * Set hidden input field with selected values (hours, minutes and seconds);
              */
-        function setInputField(
+        function setInputField(element, valueHour, valueMinute, valueSecond) {
+            element.val(valueHour + ':' + valueMinute + ':' + valueSecond);
+        }
+
+        function setInputField2(
             hour,
             minutes,
             seconds,
@@ -58,31 +69,32 @@
             minScrollHeightMinute,
             maxScrollHeightMinute,
             minScrollHeightSecond,
-            maxScrollHeightSecond
-        )
-        {
+            maxScrollHeightSecond,
+            index
+        ) {
             if (
                 (hour >= minScrollHeightHour && hour <= maxScrollHeightHour) ||
                 (minutes >= minScrollHeightMinute && minutes <= maxScrollHeightMinute) ||
                 (seconds >= minScrollHeightSecond && seconds <= maxScrollHeightSecond)
 
             ) {
-                var valueHour = $('li#hour' + hour).data('hour');
-                var valueMinute = $('li#minute' + minutes).data('minute');
-                var valueSecond = $('li#second' + seconds).data('second');
+                var valueHour = $('li#' + index + '_hour' + hour).data('hour');
+                var valueMinute = $('li#' + index + '_minute' + minutes).data('minute');
+                var valueSecond = $('li#' + index + '_second' + seconds).data('second');
                 element.val(valueHour + ':' + valueMinute + ':' + valueSecond);
             }
         }
 
-        return this.each(function (index) {
-            var element = $(this);
+        return this.each(function (index, object) {
+            var element = $(object);
+
             /*
              * Set variables for further use
              */
             var scrollHeightHour = 0;
             var minScrollHeightHour = 0;
             var maxScrollHeightHour = 23 * settings.height;
-            var scrollHeightMinute = 105;
+            var scrollHeightMinute = 0;
             var minScrollHeightMinute = 0;
             var maxScrollHeightMinute = 59 * settings.height;
             var scrollHeightSecond = 0;
@@ -92,219 +104,162 @@
             /**
              * Set start value;
              */
-            element.val(settings.startTime);
-        /*
-         * Create main placeholder
-         */
-        var mainPlaceholder = $('<div class="main-timeshift-placeholder"></div>');
-        /*
-         * Create timeshift placeholder
-         */
-        var timeshiftPlaceholder = $('<div></div>');
-        timeshiftPlaceholder
-            .attr(settings.wrapperAttrs)
-            .css('min-height', settings.height)
-            .css('max-height', settings.height)
-            .css('height', settings.height)
-            .css('width', settings.width);
-
-        /*
-         * Create a legend and add css
-         */
-        var legend = $('' +
-            '<div class="legend-placeholder">' +
-            '<span class="legend-item">'+settings.hourLegend+'</span>' +
-            '<span class="legend-item">'+settings.minuteLegend+'</span>' +
-            '<span class="legend-item">'+settings.secondLegend+'</span>' +
-            '</div>' +
-            '');
-        legend.css('width', settings.width);
-
-        /*
-         * Create hour element
-         */
-        var hourElement = $('<ul class="hoursElement" id="hours'+index+'"></ul>');
-        hourElement.height(settings.height);
-        for (var hour = 0; hour <= 23; hour++) {
-            var hourValue = (settings.hourClock === 24 ? hour : timeSheet[hour]);
-            if (settings.hourClock === 24 && (hourValue >= 0 && hourValue <= 9)) {
-                hourValue = '0'+ hourValue;
-            }
-            var hourId = hour * settings.height;
-            var elementH = $('<li class="timeItem" data-hour="'+hourValue+'" id="hour'+hourId+'">' + hourValue + '</li>');
-            elementH.height(settings.height);
-            elementH.css("line-height", settings.height + 'px');
-            hourElement.append(elementH);
-        }
-
-        /*
-         * Create minute element
-         */
-        var minuteElement = $('<ul id="minutes"></ul>');
-        minuteElement.height(settings.height)
-        for (var minute = 0; minute <= 59; minute++) {
-            var minuteId = minute * settings.height;
-            if (settings.hourClock === 24 && (minute >= 0 && minute <= 9)) {
-                minute = '0'+ minute;
-            }
-            var elementM = $('<li class="timeItem" data-minute="'+minute+'" id="minute'+minuteId+'">' + minute + '</li>');
-            elementM.height(settings.height);
-            elementM.css("line-height", settings.height + 'px');
-            minuteElement.append(elementM);
-        }
-
-        /*
-         * Create second element
-         */
-        var secondElement = $('<ul id="seconds"></ul>');
-        secondElement.height(settings.height)
-        for (var second = 0; second <= 59; second++) {
-            var secondId = second * settings.height;
-            if (settings.hourClock === 24 && (second >= 0 && second <= 9)) {
-                second = '0'+ second;
-            }
-            var elementS = $('<li class="timeItem" data-second="'+second+'" id="second'+secondId+'">' + second + '</li>');
-            elementS.height(settings.height);
-            elementS.css("line-height", settings.height + 'px');
-            secondElement.append(elementS);
-        }
-
-        hourElement.bind('mousewheel', function(event) {
-            var scrollPosition = $(this).scrollTop();
-            var inputId = $(this).siblings('input').attr('id');
-            if (event.originalEvent.wheelDelta >= 0) {
-                if (scrollPosition <= scrollHeightHour) {
-                    event.preventDefault();
-                    $(this).scrollTop(scrollHeightHour - settings.height);
-                    scrollHeightHour = $(this).scrollTop();
-                    setInputField(
-                        scrollHeightHour,
-                        scrollHeightMinute,
-                        scrollHeightSecond,
-                        element,
-                        minScrollHeightHour,
-                        maxScrollHeightHour,
-                        minScrollHeightMinute,
-                        maxScrollHeightMinute,
-                        minScrollHeightSecond,
-                        maxScrollHeightSecond
-                    );
-                }
-            } else if (event.originalEvent.wheelDelta <= maxScrollHeightHour) {
-                if (scrollPosition <= scrollHeightHour) {
-                    event.preventDefault();
-                    $(this).scrollTop(scrollHeightHour + settings.height);
-                    scrollHeightHour = $(this).scrollTop();
-                    scrollHeightHour = (scrollHeightHour > maxScrollHeightHour? maxScrollHeightHour: scrollHeightHour);
-                    setInputField(
-                        scrollHeightHour,
-                        scrollHeightMinute,
-                        scrollHeightSecond,
-                        element,
-                        minScrollHeightHour,
-                        maxScrollHeightHour,
-                        minScrollHeightMinute,
-                        maxScrollHeightMinute,
-                        minScrollHeightSecond,
-                        maxScrollHeightSecond
-                    );
-                }
-            }
-        });
-
-        minuteElement.bind('mousewheel', function(event) {
-            var scrollPosition = $(this).scrollTop();
-            var inputId = $(this).siblings('input').attr('id');
-            if (event.originalEvent.wheelDelta >= 0) {
-                if (scrollPosition <= scrollHeightMinute) {
-                    event.preventDefault();
-                    $(this).scrollTop(scrollHeightMinute - settings.height);
-                    scrollHeightMinute = $(this).scrollTop();
-                    setInputField(
-                        scrollHeightHour,
-                        scrollHeightMinute,
-                        scrollHeightSecond,
-                        element,
-                        minScrollHeightHour,
-                        maxScrollHeightHour,
-                        minScrollHeightMinute,
-                        maxScrollHeightMinute,
-                        minScrollHeightSecond,
-                        maxScrollHeightSecond
-                    );
-                }
-            } else if (event.originalEvent.wheelDelta <= maxScrollHeightMinute) {
-                if (scrollPosition <= scrollHeightMinute) {
-                    event.preventDefault();
-                    $(this).scrollTop(scrollHeightMinute + settings.height);
-                    scrollHeightMinute = $(this).scrollTop();
-                    scrollHeightMinute = (scrollHeightMinute > maxScrollHeightMinute? maxScrollHeightMinute: scrollHeightMinute);
-                    setInputField(
-                        scrollHeightHour,
-                        scrollHeightMinute,
-                        scrollHeightSecond,
-                        element,
-                        minScrollHeightHour,
-                        maxScrollHeightHour,
-                        minScrollHeightMinute,
-                        maxScrollHeightMinute,
-                        minScrollHeightSecond,
-                        maxScrollHeightSecond
-                    );
-                }
-            }
-        });
-
-        secondElement.bind('mousewheel', function(event) {
-            var scrollPosition = $(this).scrollTop();
-            var inputId = $(this).siblings('input').attr('id');
-            if (event.originalEvent.wheelDelta >= 0) {
-                if (scrollPosition <= scrollHeightSecond) {
-                    event.preventDefault();
-                    $(this).scrollTop(scrollHeightSecond - settings.height);
-                    scrollHeightSecond = $(this).scrollTop();
-                    setInputField(
-                        scrollHeightHour,
-                        scrollHeightMinute,
-                        scrollHeightSecond,
-                        element,
-                        minScrollHeightHour,
-                        maxScrollHeightHour,
-                        minScrollHeightMinute,
-                        maxScrollHeightMinute,
-                        minScrollHeightSecond,
-                        maxScrollHeightSecond
-                    );
-                }
-            } else if (event.originalEvent.wheelDelta <= maxScrollHeightSecond) {
-                if (scrollPosition <= scrollHeightSecond) {
-                    event.preventDefault();
-                    $(this).scrollTop(scrollHeightSecond + settings.height);
-                    scrollHeightSecond = $(this).scrollTop();
-                    scrollHeightSecond = (scrollHeightSecond > maxScrollHeightSecond? maxScrollHeightSecond: scrollHeightSecond);
-                    setInputField(
-                        scrollHeightHour,
-                        scrollHeightMinute,
-                        scrollHeightSecond,
-                        element,
-                        minScrollHeightHour,
-                        maxScrollHeightHour,
-                        minScrollHeightMinute,
-                        maxScrollHeightMinute,
-                        minScrollHeightSecond,
-                        maxScrollHeightSecond
-                    );
-                }
-            }
-        });
+            element.val(settings.startHour + ':' + settings.startMinutes + ':' + settings.startSeconds);
             /*
-             * Wrap main plaeholder atound timeshoft placeholder
+             * Create main placeholder
+             */
+            var mainPlaceholder = $('<div class="main-timeshift-placeholder"></div>');
+            /*
+             * Create timeshift placeholder
+             */
+            var timeshiftPlaceholder = $('<div></div>')
+                .attr(settings.wrapperAttrs)
+                .css('min-height', settings.height)
+                .css('max-height', settings.height)
+                .css('height', settings.height)
+                .css('width', settings.width);
+
+            /*
+             * Create a legend and add css
+             */
+            var legend = $('' +
+                '<div class="legend-placeholder">' +
+                '<span class="legend-item">' + settings.hourLegend + '</span>' +
+                '<span class="legend-item">' + settings.minuteLegend + '</span>' +
+                '<span class="legend-item">' + settings.secondLegend + '</span>' +
+                '</div>' +
+                '');
+            legend.css('width', settings.width);
+
+            console.log(settings.startHour);
+
+            /*
+             * Create hour element
+             */
+
+            console.log('Starthour: ', settings.startHour);
+
+            var hourElement = $('<input type="text" id="hour' + index + '" class="hoursElement" name="hour' + index + '" disabled="disabled" />');
+            hourElement.val(settings.startHour);
+            hourElement.height(settings.height);
+
+            /*
+             * Create minute element
+             */
+            var minuteElement = $('<input type="text" id="minutes' + index + '" class="minutesElement" name="minutes' + index + '" disabled="disabled" />');
+            minuteElement.val(settings.startMinutes);
+            minuteElement.height(settings.height);
+
+            /*
+             * Create second element
+             */
+            var secondElement = $('<input type="text" id="seconds' + index + '" class="secondsElement" name="seconds' + index + '" disabled="disabled" />');
+            secondElement.val(settings.startSeconds);
+            secondElement.height(settings.height)
+
+            hourElement.bind('wheel', function (event) {
+                var inputValue = parseInt(this.value);
+                if (event.originalEvent.wheelDelta > 0) {
+                    if (settings.hourClock === 24) {
+                        if (inputValue === 23) {
+                            inputValue = '00';
+                        } else {
+                            inputValue = inputValue + 1;
+                            if (inputValue >= 0 && inputValue <= 9) {
+                                inputValue = '0' + inputValue;
+                            }
+                        }
+                    } else {
+                        if (inputValue === 12) {
+                            inputValue = 0;
+                        } else {
+                            inputValue = inputValue + 1;
+                        }
+                    }
+                } else {
+                    if (settings.hourClock === 24) {
+                        if (inputValue === 0) {
+                            inputValue = '23';
+                        } else {
+                            inputValue = inputValue - 1;
+                            if (inputValue >= 0 && inputValue <= 9) {
+                                inputValue = '0' + inputValue;
+                            }
+                        }
+                    } else {
+                        if (inputValue === 0) {
+                            inputValue = 12;
+                        } else {
+                            inputValue = inputValue + 1;
+                        }
+                    }
+                }
+                this.value = inputValue;
+                setInputField(element, inputValue, minuteElement.val(), secondElement.val());
+                return false;
+            });
+
+            minuteElement.bind('mousewheel', function (event) {
+                var inputValue = parseInt(this.value);
+                if (event.originalEvent.wheelDelta > 0) {
+                    if (inputValue === 59) {
+                        inputValue = 0;
+                    } else {
+                        inputValue = inputValue + 1
+                        if (inputValue >= 0 && inputValue <= 9) {
+                            inputValue = '0' + inputValue;
+                        }
+                    }
+                } else {
+                    if (inputValue === 0) {
+                        inputValue = 59;
+                    } else {
+                        inputValue = inputValue - 1
+                        if (inputValue >= 0 && inputValue <= 9) {
+                            inputValue = '0' + inputValue;
+                        }
+                    }
+                }
+                this.value = inputValue;
+                setInputField(element, hourElement.val(), inputValue, secondElement.val());
+                return false;
+            });
+
+            secondElement.bind('mousewheel', function (event) {
+                var inputValue = parseInt(this.value);
+                if (event.originalEvent.wheelDelta > 0) {
+                    if (inputValue === 59) {
+                        inputValue = 0;
+                    } else {
+                        inputValue = inputValue + 1
+                        if (inputValue >= 0 && inputValue <= 9) {
+                            inputValue = '0' + inputValue;
+                        }
+                    }
+                } else {
+                    if (inputValue === 0) {
+                        inputValue = 59;
+                    } else {
+                        inputValue = inputValue - 1
+                        if (inputValue >= 0 && inputValue <= 9) {
+                            inputValue = '0' + inputValue;
+                        }
+                    }
+                }
+
+                this.value = inputValue;
+
+                setInputField(element, hourElement.val(), minuteElement.val(), inputValue);
+                return false;
+            });
+            /*
+             * Wrap main plaeholder around timeshift placeholder
              */
             $(this).wrap(mainPlaceholder).wrap(timeshiftPlaceholder);
             /**
              * Add legend
              */
-            if(settings.legend) {
+            if (settings.legend) {
                 $(this).parent().parent().prepend(legend);
             }
             /*

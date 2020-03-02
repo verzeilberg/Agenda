@@ -13,25 +13,45 @@
         <?php echo $this->formText($form->get('endDate')); ?>
     </div>
 </div>
-<div class="form-group row mt-2">
-    <div class="col text-center">
-        <?php echo $this->formHidden($form->get('startTime')); ?>
-    </div>
-    <div class="col text-center">
-        <?php echo $this->formHidden($form->get('endTime')); ?>
+<div id="startEndTime">
+    <div class="form-group row mt-2">
+        <div class="col text-center">
+            <?php echo $this->formHidden($form->get('startTime')); ?>
+        </div>
+        <div class="col text-center">
+            <?php echo $this->formHidden($form->get('endTime')); ?>
+        </div>
     </div>
 </div>
 <div class="form-group">
     <?php echo $this->formLabel($form->get('title')); ?>
-        <?= $this->formText($form->get('title')); ?>
+    <?= $this->formText($form->get('title')); ?>
     <?php if (count($form->getMessages('title')) > 0) { ?>
         <small class="form-text text-danger"><?php echo $this->formElementErrors($form->get('title')); ?></small>
     <?php } ?>
 </div>
 <div class="form-group">
     <?php echo $this->formLabel($form->get('description')); ?>
-        <?= $this->formTextarea($form->get('description')); ?>
+    <?= $this->formTextarea($form->get('description')); ?>
     <?php if (count($form->getMessages('description')) > 0) { ?>
         <small class="form-text text-danger"><?php echo $this->formElementErrors($form->get('description')); ?></small>
     <?php } ?>
 </div>
+
+<script>
+    $(document).ready(function () {
+        if ($('input[name="wholeDay"]').is(":checked")) {
+            $('#startEndTime').hide();
+        } else {
+            $('#startEndTime').show();
+        }
+
+        $('input[name="wholeDay"]').change(function () {
+            if ($(this).is(":checked")) {
+                $('#startEndTime').hide();
+            } else {
+                $('#startEndTime').show();
+            }
+        });
+    });
+</script>

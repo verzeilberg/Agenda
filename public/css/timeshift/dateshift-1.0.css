@@ -8,8 +8,15 @@ div.calendar-placeholder {
     min-height: 200px;
 }
 
-h3#monthAndYear {
-    color: #000000;
+div.calendarHeader {
+    border-radius: 6px 6px 0 0;
+}
+
+div.calendarFooter {
+    border-radius: 0 0 6px 6px;
+}
+
+h3.monthAndYear {
     font-weight: 500;
     font-size: 18px;
     padding: 5px 0;
@@ -17,19 +24,24 @@ h3#monthAndYear {
     font-family: 'Montserrat', sans-serif;
 }
 
-span#next,
-span#previous {
+span.next,
+span.previous {
     cursor: pointer;
 }
 
-table#calendar {
+table.calendar {
     font-family: 'Montserrat', sans-serif;
 }
 
-table#calendar thead tr th {
-    font-size: 10px;
+table.calendar thead tr th {
+    font-size: 9px;
+    font-weight:bold;
 }
 
-td.selectDate {
+table.calendar tr td {
+    font-size:9px;
+}
+
+table.calendar td.selectDate {
     cursor: pointer;
 }

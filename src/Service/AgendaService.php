@@ -11,16 +11,76 @@ use Agenda\Repository\AgendaItemRepository;
 class AgendaService implements AgendaServiceInterface
 {
 
-    /*
- * @var AgendaItemRepository
- */
+    /**
+     * @var AgendaItemRepository
+     */
     public $agendaItemRepository;
+    /**
+     * @var config
+     */
+    private $config;
 
     public function __construct(
-        AgendaItemRepository $agendaItemRepository
+        AgendaItemRepository $agendaItemRepository,
+        $config
     )
     {
         $this->agendaItemRepository = $agendaItemRepository;
+        $this->config = $config;
+    }
+
+    /**
+     * Get 12 or 24 hours settings
+     * @return array
+     */
+    public function getTwentyFourHours()
+    {
+            $clock = $this->config['agenda_settings']['clock'];
+            //Default 24 hours
+            $hours = [
+                '0:00',
+                '1:00',
+                '2:00',
+                '3:00',
+                '4:00',
+                '5:00',
+                '6:00',
+                '7:00',
+                '8:00',
+                '9:00',
+                '10:00',
+                '11:00',
+                '12:00',
+                '13:00',
+                '14:00',
+                '15:00',
+                '16:00',
+                '17:00',
+                '18:00',
+                '19:00',
+                '20:00',
+                '21:00',
+                '22:00',
+                '23:00',
+            ];
+            if ($clock == '12' ) {
+                $hours = [
+                    '0:00',
+                    '1:00',
+                    '2:00',
+                    '3:00',
+                    '4:00',
+                    '5:00',
+                    '6:00',
+                    '7:00',
+                    '8:00',
+                    '9:00',
+                    '10:00',
+                    '11:00',
+                    '12:00',
+                ];
+            }
+            return $hours;
     }
 
     /**
@@ -29,9 +89,10 @@ class AgendaService implements AgendaServiceInterface
      * @return bool|DateTime|null
      * @throws \Exception
      */
-    public function checkDayDate($date = null) {
-        $length =  strlen($date);
-        if($length != 8) {
+    public function checkDayDate($date = null)
+    {
+        $length = strlen($date);
+        if ($length != 8) {
             return false;
         }
         $date = new DateTime($date);
@@ -45,16 +106,17 @@ class AgendaService implements AgendaServiceInterface
      * @return int
      * @throws \Exception
      */
-    public function weeksInMonth($month=null,$year=null){
+    public function weeksInMonth($month = null, $year = null)
+    {
         // find number of days in this month
-        $daysInMonths = (int) $this->daysInMonth($month,$year);
-        $numOfWeeks = ($daysInMonths%7==0?0:1) + $daysInMonths/7;
-        $monthEndingDay= date('N',strtotime($year.'-'.$month.'-'.$daysInMonths));
-        $monthStartDay = date('N',strtotime($year.'-'.$month.'-01'));
-        if($monthEndingDay<$monthStartDay){
+        $daysInMonths = (int)$this->daysInMonth($month, $year);
+        $numOfWeeks = ($daysInMonths % 7 == 0 ? 0 : 1) + $daysInMonths / 7;
+        $monthEndingDay = date('N', strtotime($year . '-' . $month . '-' . $daysInMonths));
+        $monthStartDay = date('N', strtotime($year . '-' . $month . '-01'));
+        if ($monthEndingDay < $monthStartDay) {
             $numOfWeeks++;
         }
-        return (int) $numOfWeeks;
+        return (int)$numOfWeeks;
     }
 
     /**
@@ -64,9 +126,10 @@ class AgendaService implements AgendaServiceInterface
      * @return int
      * @throws \Exception
      */
-    public function daysInMonth($month=null,$year=null){
-        $date = new DateTime($year.'-'.$month.'-01');
-        return (int) $date->format('t');
+    public function daysInMonth($month = null, $year = null)
+    {
+        $date = new DateTime($year . '-' . $month . '-01');
+        return (int)$date->format('t');
     }
 
     /**
@@ -142,7 +205,8 @@ class AgendaService implements AgendaServiceInterface
      * @return mixed
      * @throws \Exception
      */
-    function getStartAndEndDate($week, $year) {
+    function getStartAndEndDate($week, $year)
+    {
         $dto = new DateTime();
         $ret['week_start'] = $dto->setISODate($year, $week)->format('Y-m-d');
         $ret['week_end'] = $dto->modify('+6 days')->format('Y-m-d');
@@ -176,16 +240,35 @@ class AgendaService implements AgendaServiceInterface
 
     /**
      * Create form of an object
-     * @param       object $agendaItem
+     * @param object $agendaItem
      * @return      form
      */
-    public function createAgendaItemForm($agendaItem) {
+    public function createAgendaItemForm($agendaItem)
+    {
         $builder = new AnnotationBuilder($this->agendaItemRepository->returnEntityManager());
         $form = $builder->createForm($agendaItem);
         $form->setHydrator(new DoctrineHydrator($this->agendaItemRepository->returnEntityManager(), AgendaItem::class));
         $form->bind($agendaItem);
 
         return $form;
+    }
+
+    public function convertAgendaItemsToJson($agendaItems)
+    {
+        $result = [];
+        if (count($agendaItems) > 0)
+        {
+            foreach ($agendaItems as $index => $agendaItem)
+            {
+                $item = [];
+                $item['title'] = $agendaItem->getTitle();
+                $item['startTime'] = $agendaItem->getStartTime();
+                $item['endTime'] = $agendaItem->getEndTime();
+                $result[] = $item;
+            }
+        }
+
+        return $result;
     }
 
 }

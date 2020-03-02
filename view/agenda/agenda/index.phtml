@@ -29,16 +29,20 @@ $this->pageBreadcrumbs()->setItems([
     <div class="col text-center">
         <a href="<?= $this->url('beheer/agenda'); ?>" title="Vandaag" class="btn btn-warning btn-sm">Vandaag</a>
         <div class="btn-group">
-            <button id="agendaLayout" type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <button id="agendaLayout" type="button" class="btn btn-warning btn-sm dropdown-toggle"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Day
             </button>
             <div class="dropdown-menu bg-warning">
-                <a class="dropdown-item<?= ($layout == 'day'? ' active':''); ?>" data-layout="day" href="/beheer/agenda/day">Day</a>
-                <a class="dropdown-item<?= ($layout == 'week'? ' active':''); ?>" data-layout="week" href="/beheer/agenda/week">Week</a>
-                <a class="dropdown-item<?= ($layout == 'month'? ' active':''); ?>" data-layout="month" href="/beheer/agenda">Month</a>
+                <a class="dropdown-item<?= ($layout == 'day' ? ' active' : ''); ?>" data-layout="day"
+                   href="/beheer/agenda/day">Day</a>
+                <a class="dropdown-item<?= ($layout == 'week' ? ' active' : ''); ?>" data-layout="week"
+                   href="/beheer/agenda/week">Week</a>
+                <a class="dropdown-item<?= ($layout == 'month' ? ' active' : ''); ?>" data-layout="month"
+                   href="/beheer/agenda">Month</a>
             </div>
         </div>
-        <input type="hidden" name="layout" value="<?= $layout ?>" />
+        <input type="hidden" name="layout" value="<?= $layout ?>"/>
     </div>
     <div class="col text-right">
         <a
@@ -86,7 +90,7 @@ $this->pageBreadcrumbs()->setItems([
                             <?php
                             $day = null;
 
-                            if(($i == 0 && $j >= $firstDayOfTheMonth->format('N')) || ((int)$i > 0)) {
+                            if (($i == 0 && $j >= $firstDayOfTheMonth->format('N')) || ((int)$i > 0)) {
                                 $day = $this->agendaViewHelper()->showDay(
                                     $selectedMonthYear->format('m'),
                                     $selectedMonthYear->format('Y'),
@@ -99,12 +103,14 @@ $this->pageBreadcrumbs()->setItems([
                             ?>
                             <?php if (is_object($day)) { ?>
                                 <th>
-                                <span class="dateLink <?= ($day->format('Ymd') == $currentDate->format('Ymd')? 'bg-warning text-dark': '') ?>"
+                                <span class="dateLink <?= ($day->format('Ymd') == $currentDate->format('Ymd') ? 'bg-warning text-dark' : '') ?>"
+                                      data-date="<?= $day->format('d-m-Y') ?>"
                                       data-link="<?= $this->url('beheer/agenda', [
                                               'action' => 'day',
                                               'day' => $day->format('Ymd')]
                                       ); ?>">
                                 <?= $day->format('j'); ?>
+                                    <?= (count($agendaItems[$day->format('Ymd')]) > 0? '<span class="agendaItem">' .count($agendaItems[$day->format('Ymd')]) . '</span>':''); ?>
                             </span>
                                 </th>
                             <?php } else { ?>
@@ -127,9 +133,24 @@ $this->pageBreadcrumbs()->setItems([
             </div>
             <div id="month"
                  class="text-right">
-                <?= $this->agendaViewHelper()->getMonthLabels('nl', $currentDate->format('n')); ?>/<?= $currentDate->format('Y'); ?>
+                <?= $this->agendaViewHelper()->getMonthLabels('nl', $currentDate->format('n')); ?>
+                /<?= $currentDate->format('Y'); ?>
             </div>
-            <button id="addAgendaItem" type="button" class="btn btn-warning" data-toggle="modal"
+            <div>
+                <table class="table table-borderless" id="agendaItemsForDay">
+                    <tbody>
+                        <?php foreach ($agendaItemsForCurrentDate as $agendaItem) { ?>
+                    <tr>
+                        <td style="width:60%; font-family:arial"><?= $this->agendaViewHelper()->shortenTitle($agendaItem->getTitle()); ?></td>
+                        <td style="width:40%; font-family:arial" class="text-right"><?= $agendaItem->getStartTime()->format('H:i:s'); ?> - <?= $agendaItem->getEndTime()->format('H:i:s'); ?></td>
+                    </tr>
+
+                    <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <button id="addAgendaItem" type="button" class="btn btn-warning addAgendaItemButton" data-toggle="modal"
                     data-target=".bd-example-modal-lg"><i class="fas fa-plus-circle"></i></button>
         </div>
 
@@ -137,17 +158,22 @@ $this->pageBreadcrumbs()->setItems([
 </div>
 
 <!-- Add agenda item modal -->
-<div id="addAgendaItem" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+<div id="addAgendaItem" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
+            <?php
+            $form->setAttribute('novalidate', 'novalidate');
+            $form->prepare();
+            ?>
             <?= $this->form()->openTag($form); ?>
             <div class="modal-header bg-dark">
                 <h5 class="modal-title" id="exampleModalLongTitle">Add agenda item</h5>
             </div>
             <div class="modal-body">
                 <!-- Agenda item form -->
-                <?= $this->partial('agenda/partial/form.phtml', array('form' => $form));?>
+                <?= $this->partial('agenda/partial/form.phtml', array('form' => $form)); ?>
             </div>
             <div class="modal-footer">
                 <button id="submitAgendaItem" type="submit" class="btn btn-warning">
@@ -164,8 +190,7 @@ $this->pageBreadcrumbs()->setItems([
 
 <script>
 
-    function setAgendaLayout()
-    {
+    function setAgendaLayout() {
         var buttonText = $('input[name=layout]').val();
         $('button#agendaLayout').html(buttonText);
     }
@@ -181,10 +206,15 @@ $this->pageBreadcrumbs()->setItems([
 
     $(document).ready(function () {
 
+
+        /**
+         * Submit agenda item
+         */
         $("button#submitAgendaItem").on("click", function (event) {
             event.preventDefault();
             var form = $(this).parent('div').parent('form');
-            var data = form.serializeArray()
+            var data = form.serializeArray();
+            //Validate form
             var valide = validateForm(data, form);
             if (valide) {
                 $.ajax({
@@ -195,10 +225,10 @@ $this->pageBreadcrumbs()->setItems([
                     url: "<?= $this->url('agendaAjax', ['action' => 'addAgendaItem']); ?>",
                     async: true,
                     success: function (data) {
-                        if (data.success === true) {
-                            $('#addAgendaItem').modal('hide')
+                        if (data['success'] === true) {
+                            $('.bd-example-modal-lg').modal('hide');
                         } else {
-                            alert(data.errorMessage);
+                            alert(data['errorMessage']);
                         }
                     }
                 });
@@ -206,26 +236,33 @@ $this->pageBreadcrumbs()->setItems([
 
         });
 
-        function validateForm(data, form)
-        {
+        /**
+         * Function to validate form
+         */
+        function validateForm(data, form) {
             var result = true;
-            $.each(data, function(index, object) {
-                if(typeof($('[name="'+object.name+'"]').attr('required')) !== 'undefined') {
-                    result = (object.value == ''? false:true);
+            $.each(data, function (index, object) {
+                if (typeof ($('[name="' + object.name + '"]').attr('required')) !== 'undefined') {
+                    result = (object.value == '' ? false : true);
                     if (!result) {
-                        $('[name="'+object.name+'"]').css('border','2px solid #ffc107');
+                        $('[name="' + object.name + '"]').css('border', '2px solid #ffc107');
                     }
                 }
-            })
+            });
             return result;
         }
 
-
-        $( "#startTime, #endTime" ).timeshift({
+        /**
+         * Init timeshift
+         */
+        $("#startTime, #endTime").timeshift({
             hourClock: 24
         });
 
-        $( "input[name=startDate]" ).dateshift({
+        /**
+         * Init dateshift
+         */
+        $("input[name=startDate], input[name=endDate]").dateshift({
             preappelement: '<i class="far fa-calendar-alt"></i>',
             preapp: 'app',
             nextButtonText: '<i class="far fa-caret-square-right"></i>',
@@ -233,32 +270,34 @@ $this->pageBreadcrumbs()->setItems([
             dateFormat: 'dd-mm-yyyy'
         });
 
-
-
-        $('input#startTime').siblings('ul#hours0').scrollTop(70);
-
         /**
          * jQuery function to go to link when selected
          */
         $("span.dateLink").on("click", function () {
             var link = $(this).data('link');
+            var date = $(this).data('date');
+            //If element has class selected go to that day
             if ($(this).hasClass('selected')) {
                 window.location.href = link;
             }
             $('span.dateLink').removeClass('selected');
             $(this).addClass('selected');
             getDateData(link);
+            $('input[name=startDate]').val(date);
+            $('input[name=endDate]').val(date);
         });
         /**
          * jQuery function to redirect on click weekLink
          */
         $("span.weekLink").on("click", function () {
-                var link = $(this).data('link');
-                window.location.href = link;
+            var link = $(this).data('link');
+            window.location.href = link;
         });
-
-        function getDateData(date)
-        {
+        /**
+         * Get date data for clicked day
+         * @param date
+         */
+        function getDateData(date) {
             $.ajax({
                 type: 'POST',
                 data: {
@@ -271,10 +310,24 @@ $this->pageBreadcrumbs()->setItems([
                         var day = data.dateData.day;
                         var dayName = data.dateData.dayName;
                         var month = data.dateData.month;
-                        var year = data.dateData.year
+                        var year = data.dateData.year;
+
+
+
                         $('#date').html(day);
                         $('#day').html(dayName);
                         $('#month').html(month + '/' + year);
+                        $('table#agendaItemsForDay tbody').empty();
+                        $.each(data.agendaItems, function( index, item ) {
+                            var startTime = getTimeFormat('hh:mm:ss', item.startTime.date);
+                            var endTime = getTimeFormat('hh:mm:ss', item.endTime.date);
+                            var row = $('<tr>');
+                            row.append($('<td>').html(shortenTitle(item.title)));
+                            row.append($('<td class="text-right">').html(startTime + ' - ' + endTime));
+                            $('table#agendaItemsForDay tbody').append(row);
+                        });
+
+
                     } else {
                         alert(data.errorMessage);
                     }

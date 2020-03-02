@@ -102,4 +102,7 @@ return [
             ],
         ],
     ],
+    'agenda_settings' => [
+        'clock' => '24' // 12/24 clock
+    ]
 ];

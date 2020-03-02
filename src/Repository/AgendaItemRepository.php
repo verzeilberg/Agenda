@@ -1,4 +1,5 @@
 <?php
+
 namespace Agenda\Repository;
 
 use Doctrine\ORM\EntityRepository;
@@ -8,28 +9,54 @@ use Agenda\Entity\AgendaItem;
 class AgendaItemRepository extends EntityRepository
 {
     /**
-     * Get fastest agenda item
-     * @param $type type of activity (exampl. Run or Ride)
-     * @param int $workoutType type of workout 1 = Competition 13 = Training
-     *
-     * @return      array
+     * @param $date
+     * @return array
      */
-    public function getFastestAgendaItem($type = null, $workoutType = 1)
+    public function getAgendaItemsByMonth($date)
     {
-        $qb = $this->createQueryBuilder('r');
-        $qb->leftJoin('r.activity a');
-        $qb->where('a.workoutType = :workOut');
-        $qb->andWhere('r.movingTime > 0');
-        if (!empty($type)) {
-            $qb->andWhere('a.type = :type');
-            $qb->setParameter('type', $type);
-        }
-        $qb->setParameter('workOut', $workoutType);
-        $qb->orderBy('r.movingTime', 'ASC');
-        $qb->setMaxResults(1);
+        $startMonth = clone $date->modify('first day of this month');
+        $endMonth = $date->modify('last day of this month');
+        $qb = $this->createQueryBuilder('a');
+        $qb->where('a.startDate >= :startMonth OR a.endDate >= :endMonth');
+        $qb->setParameter('startMonth', $startMonth->format('Y-m-d'));
+        $qb->setParameter('endMonth', $endMonth->format('Y-m-d'));
+        $qb->orderBy('a.startDate', 'ASC');
         $query = $qb->getQuery();
         $result = $query->getResult();
-        return $result[0];
+
+
+        $agendaItems = [];
+        foreach ($result as $index => $item) {
+            $interval = $item->getStartDate()->diff($item->getEndDate());
+            if($interval->format('%a') > 0) {
+                for ($x = 0; $x <= $interval->format('%a'); $x++) {
+                    $startDate = $item->getStartDate();
+                    if ($x > 0) {
+                        $startDate->modify('+1 day');
+                    }
+                    $agendaItems[$startDate->format('Ymd')][] = $item;
+                }
+            } else {
+                $agendaItems[$item->getStartDate()->format('Ymd')][] = $item;
+            }
+        }
+        return $agendaItems;
+    }
+
+    /**
+     * Get agenda items by date
+     * @param $date
+     * @return array
+     */
+    public function getAgendaItemsByDay($date)
+    {
+        $qb = $this->createQueryBuilder('a');
+        $qb->where(':date BETWEEN a.startDate AND a.endDate');
+        $qb->setParameter('date', $date->format('Y-m-d'));
+        $qb->orderBy('a.startDate', 'ASC');
+        $query = $qb->getQuery();
+        $result = $query->getResult();
+        return $result;
     }
 
     /**

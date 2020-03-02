@@ -46,11 +46,14 @@ class AgendaAjaxController extends AbstractActionController
             'year' => $date->format('Y')
         ];
 
+        $agendaItems = $this->agendaService->agendaItemRepository->getAgendaItemsByDay($date);
+        $agendaItems= $this->agendaService->convertAgendaItemsToJson($agendaItems);
 
         return new JsonModel([
             'errorMessage' => $errorMessage,
             'success' => $success,
-            'dateData' => $dateData
+            'dateData' => $dateData,
+            'agendaItems' => $agendaItems
         ]);
 
     }
@@ -64,15 +67,16 @@ class AgendaAjaxController extends AbstractActionController
         $agendaItem = $this->agendaService->agendaItemRepository->createAgendaItem();
 
         foreach($data as $item) {
-            $setter = 'set' . ucfirst($item['name']);
-            $agendaItem->$setter($item['value']);
+           $setter = 'set' . ucfirst($item['name']);
+            if(ucfirst($item['name']) == 'StartDate' || ucfirst($item['name']) == 'EndDate') {
+                $date = new DateTime($item['value']);
+                $agendaItem->$setter($date);
+            } else {
+                $agendaItem->$setter($item['value']);
+            }
         }
-
-        $agendaItem->setStartDate(new DateTime());
-        $agendaItem->setEndDate(new DateTime());
-
-        $agendaItem->setDateCreated(new DateTime("now"));
-        $agendaItem->setCreatedBy(null);
+        $agendaItem->setDateCreated(new DateTime());
+        $agendaItem->setCreatedBy($this->currentUser());
         $success = $this->agendaService->agendaItemRepository->storeAgendaItem($agendaItem);
 
         return new JsonModel([
