@@ -3,10 +3,10 @@
 namespace Agenda\Controller;
 
 use DateTime;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Model\ViewModel;
-use Zend\View\HelperPluginManager;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
+use Laminas\View\HelperPluginManager;
 use Agenda\Service\AgendaService;
 
 class AgendaController extends AbstractActionController {

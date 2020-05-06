@@ -4,7 +4,7 @@ namespace Agenda\View\Helper\Factory;
 use Agenda\Entity\AgendaItem;
 use Agenda\Service\AgendaService;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Agenda\View\Helper\AgendaHelper;
 
 /**

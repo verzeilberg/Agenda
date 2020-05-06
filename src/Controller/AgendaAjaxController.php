@@ -3,11 +3,11 @@
 namespace Agenda\Controller;
 
 use DateTime;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Mvc\MvcEvent;
-use Zend\Validator\Date;
-use Zend\View\Model\JsonModel;
-use Zend\View\HelperPluginManager;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Validator\Date;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\HelperPluginManager;
 use Agenda\Service\AgendaService;
 
 class AgendaAjaxController extends AbstractActionController
