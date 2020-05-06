@@ -3,7 +3,7 @@
 namespace Agenda\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\Form\Annotation;
+use Laminas\Form\Annotation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Application\Model\UnityOfWork;
 
@@ -83,7 +83,7 @@ class AgendaItem extends UnityOfWork {
 
     /**
      * @ORM\Column(name="whole_day", type="integer", length=1, nullable=true)
-     * @Annotation\Type("Zend\Form\Element\Checkbox")
+     * @Annotation\Type("Laminas\Form\Element\Checkbox")
      * @Annotation\Options({
      * "label": "Gehele dag",
      * "label_attributes": {"class": "form-check-label", "for":"wholeDay"},

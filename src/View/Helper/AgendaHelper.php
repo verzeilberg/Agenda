@@ -3,7 +3,7 @@
 namespace Agenda\View\Helper;
 
 use Agenda\Service\AgendaService;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 use DateTime;
 
 class AgendaHelper extends AbstractHelper

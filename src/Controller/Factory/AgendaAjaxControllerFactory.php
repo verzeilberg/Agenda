@@ -4,7 +4,7 @@ namespace Agenda\Controller\Factory;
 
 use Agenda\Entity\AgendaItem;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Agenda\Controller\AgendaAjaxController;
 use Agenda\Service\AgendaService;
 
