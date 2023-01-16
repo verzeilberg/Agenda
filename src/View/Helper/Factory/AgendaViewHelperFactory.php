@@ -16,8 +16,9 @@ class AgendaViewHelperFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
+        $config = $container->get('config');
         $agendaItemRepository = $entityManager->getRepository(AgendaItem::class);
-        $agendaService = new AgendaService($agendaItemRepository);
+        $agendaService = new AgendaService($agendaItemRepository, $config);
 
         // Instantiate the helper.
         return new AgendaHelper($agendaService);

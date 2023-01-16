@@ -3,10 +3,10 @@
 namespace Agenda\Service;
 
 use DateTime;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use DoctrineORMModule\Form\Annotation\AnnotationBuilder;
+use Doctrine\Laminas\Hydrator\DoctrineObject as DoctrineHydrator;
 use Agenda\Entity\AgendaItem;
 use Agenda\Repository\AgendaItemRepository;
+use Laminas\Form\Annotation\AnnotationBuilder;
 
 class AgendaService implements AgendaServiceInterface
 {

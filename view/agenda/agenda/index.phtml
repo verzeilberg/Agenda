@@ -3,7 +3,7 @@ $this->mainMenu()->setActiveItemId('agenda');
 $this->pageBreadcrumbs()->setLayout('beheer');
 $this->pageBreadcrumbs()->setItems([
     'Beheer' => $this->url('beheer'),
-    'Agenda' => $this->url('beheer/agenda'),
+    'Agenda' => $this->url('agendabeheer'),
 ]);
 ?>
 <div class="row">
@@ -27,7 +27,7 @@ $this->pageBreadcrumbs()->setItems([
         </a>
     </div>
     <div class="col text-center">
-        <a href="<?= $this->url('beheer/agenda'); ?>" title="Vandaag" class="btn btn-warning btn-sm">Vandaag</a>
+        <a href="<?= $this->url('agendabeheer'); ?>" title="Vandaag" class="btn btn-warning btn-sm">Vandaag</a>
         <div class="btn-group">
             <button id="agendaLayout" type="button" class="btn btn-warning btn-sm dropdown-toggle"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -76,7 +76,7 @@ $this->pageBreadcrumbs()->setItems([
                         <th>
                             <span
                                     class="weekLink"
-                                    data-link="<?= $this->url('beheer/agenda', [
+                                    data-link="<?= $this->url('agendabeheer', [
                                             'action' => 'week',
                                             'day' => $selectedMonthYear->format('Y') . $weekNumber]
                                     ); ?>">
@@ -105,12 +105,12 @@ $this->pageBreadcrumbs()->setItems([
                                 <th>
                                 <span class="dateLink <?= ($day->format('Ymd') == $currentDate->format('Ymd') ? 'bg-warning text-dark' : '') ?>"
                                       data-date="<?= $day->format('d-m-Y') ?>"
-                                      data-link="<?= $this->url('beheer/agenda', [
+                                      data-link="<?= $this->url('agendabeheer', [
                                               'action' => 'day',
                                               'day' => $day->format('Ymd')]
                                       ); ?>">
                                 <?= $day->format('j'); ?>
-                                    <?= (count($agendaItems[$day->format('Ymd')]) > 0? '<span class="agendaItem">' .count($agendaItems[$day->format('Ymd')]) . '</span>':''); ?>
+                                    <?= (!empty($agendaItems)  && count($agendaItems[$day->format('Ymd')]) > 0? '<span class="agendaItem">' .count($agendaItems[$day->format('Ymd')]) . '</span>':''); ?>
                             </span>
                                 </th>
                             <?php } else { ?>
