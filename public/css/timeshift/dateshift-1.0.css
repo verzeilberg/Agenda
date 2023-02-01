@@ -6,6 +6,8 @@ div.calendar-placeholder {
     background-color: #ffffff;
     z-index: 9;
     min-height: 200px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 div.calendarHeader {
@@ -44,4 +46,10 @@ table.calendar tr td {
 
 table.calendar td.selectDate {
     cursor: pointer;
+}
+
+.dateshift-placeholder > .input-group > .input-group-append > .input-group-text {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    height:100%;
 }

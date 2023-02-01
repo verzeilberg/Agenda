@@ -275,7 +275,7 @@
                         cell.append('&nbsp;');
                         row.append(cell);
                     } else {
-                        var cell = $('<td class="selectDate" date="' + getDateByFormat(date, month, year) + '">');
+                        var cell = $('<td class="selectDate text-center" date="' + getDateByFormat(date, month, year) + '">');
                         if (date === today.getDate() && year === today.getFullYear() && month === (today.getMonth() + 1)) {
                             cell.addClass("bg-warning");
                         } // color today's date

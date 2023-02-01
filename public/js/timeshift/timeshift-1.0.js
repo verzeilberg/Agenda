@@ -130,15 +130,9 @@
                 '</div>' +
                 '');
             legend.css('width', settings.width);
-
-            console.log(settings.startHour);
-
             /*
              * Create hour element
              */
-
-            console.log('Starthour: ', settings.startHour);
-
             var hourElement = $('<input type="text" id="hour' + index + '" class="hoursElement" name="hour' + index + '" disabled="disabled" />');
             hourElement.val(settings.startHour);
             hourElement.height(settings.height);
