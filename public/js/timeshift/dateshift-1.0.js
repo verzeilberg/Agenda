@@ -98,7 +98,7 @@
         ];
 
         /**
-         * Check if date part is greater then 9 to add leading zero
+         * Check if date part is greater than 9 to add leading zero
          * @param datePart
          * @returns {string|*}
          */
@@ -298,7 +298,7 @@
         }
 
         /**
-         * When clicking on next button set the right month and year in calender
+         * When clicking on next button set the right month and year in calendar
          * @param currentYear
          * @param currentMonth
          * @param calendarTableBody
@@ -314,7 +314,7 @@
         }
 
         /**
-         * When clicking on previous button set the right month and year in calender
+         * When clicking on previous button set the right month and year in calendar
          * @param currentYear
          * @param currentMonth
          * @param calendarTableBody
@@ -331,8 +331,8 @@
 
         return this.each(function (index, object) {
 
-            /*
-             * Check if is a input field. When false create one
+            /**
+             * Check if is an input field. When false create one
              */
             if (!$(object).is('input')) {
                 object = '<input id="' + settings.elementId + '" type="text" name="' + settings.elementName + '"/>';
@@ -499,7 +499,7 @@
                 $(object).parent('div').siblings('div.calendar-placeholder').show();
 
                 /**
-                 * After a hover on input filed init a hover on calendar div
+                 * After a hover on input field init a hover on calendar div
                  */
                 $(object).parent('div').siblings('div.calendar-placeholder').hover(function () {
                     $(object).parent('div').siblings('div.calendar-placeholder').show();

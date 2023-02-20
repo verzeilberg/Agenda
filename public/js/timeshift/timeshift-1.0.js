@@ -7,6 +7,9 @@
         var currentMinutes = currentDate.getMinutes();
         var currentSeconds = currentDate.getSeconds();
 
+        /**
+         * Default options.
+         */
         var defaults = {
             height: 35,
             width: 200,
@@ -22,14 +25,15 @@
             secondLegend: 'S',
             nameHiddenInputElement: 'timeValue',
             idHiddenInputElement: 'timeValue',
-            startHour: 0,
-            startMinutes: 0,
-            startSeconds: 0
+            currentTime: true,
+            startHour: '00',
+            startMinutes: '00',
+            startSeconds: '00',
         };
 
 
-        /*
-         * Filter options. Compare them with the default ones and only use the defailt settings
+        /**
+         * Filter options. Compare them with the default ones and only use the default settings
          */
         var filteredOptions = {};
         $.each(options, function (index, value) {
@@ -37,13 +41,12 @@
                 filteredOptions[index] = value;
             }
         });
-        /*
+        /**
          * Create settings array
          */
         var settings = $.extend({}, defaults, filteredOptions);
 
-
-        /*
+        /**
          * Create a timesheet index is 24 clock value is 12 clock
          */
         var timeSheet = {
@@ -52,9 +55,9 @@
             21: 9, 22: 10, 23: 11
         };
 
-        /*
-             * Set hidden input field with selected values (hours, minutes and seconds);
-             */
+        /**
+         * Set hidden input field with selected values (hours, minutes and seconds);
+         */
         function setInputField(element, valueHour, valueMinute, valueSecond) {
             element.val(valueHour + ':' + valueMinute + ':' + valueSecond);
         }
@@ -85,10 +88,13 @@
             }
         }
 
+        /**
+         * Loop trough each timeShift Element
+         */
         return this.each(function (index, object) {
             var element = $(object);
 
-            /*
+            /**
              * Set variables for further use
              */
             var scrollHeightHour = 0;
@@ -102,22 +108,26 @@
             var maxScrollHeightSecond = 59 * settings.height;
 
             /**
-             * Set start value;
+             * Set start value, check if value is set
              */
-
             if (element.val() === '') {
-                element.val(settings.startHour + ':' + settings.startMinutes + ':' + settings.startSeconds);
+                if (settings.currentTime) {
+                    element.val(currentHours + ':' + currentMinutes + ':' + currentSeconds);
+                } else {
+                    element.val(settings.startHour + ':' + settings.startMinutes + ':' + settings.startSeconds);
+                }
             } else {
-                const timeArray = element.val() .split(":");
+                const timeArray = element.val().split(":");
                 settings.startHour = timeArray[0];
                 settings.startMinutes = timeArray[1];
                 settings.startSeconds = timeArray[2];
             }
-            /*
+            /**
              * Create main placeholder
              */
             var mainPlaceholder = $('<div class="main-timeshift-placeholder"></div>');
-            /*
+
+            /**
              * Create timeshift placeholder
              */
             var timeshiftPlaceholder = $('<div></div>')
@@ -127,7 +137,7 @@
                 .css('height', settings.height)
                 .css('width', settings.width);
 
-            /*
+            /**
              * Create a legend and add css
              */
             var legend = $('' +
@@ -138,27 +148,31 @@
                 '</div>' +
                 '');
             legend.css('width', settings.width);
-            /*
+
+            /**
              * Create hour element
              */
             var hourElement = $('<input type="text" id="hour' + index + '" class="hoursElement" name="hour' + index + '" disabled="disabled" />');
             hourElement.val(settings.startHour);
             hourElement.height(settings.height);
 
-            /*
+            /**
              * Create minute element
              */
             var minuteElement = $('<input type="text" id="minutes' + index + '" class="minutesElement" name="minutes' + index + '" disabled="disabled" />');
             minuteElement.val(settings.startMinutes);
             minuteElement.height(settings.height);
 
-            /*
+            /**
              * Create second element
              */
             var secondElement = $('<input type="text" id="seconds' + index + '" class="secondsElement" name="seconds' + index + '" disabled="disabled" />');
             secondElement.val(settings.startSeconds);
             secondElement.height(settings.height)
 
+            /**
+             * Bind the mouse wheel event to the hour element
+             */
             hourElement.bind('wheel', function (event) {
                 var inputValue = parseInt(this.value);
                 if (event.originalEvent.wheelDelta > 0) {
@@ -201,6 +215,9 @@
                 return false;
             });
 
+            /**
+             * Bind the mouse wheel event to the minute element
+             */
             minuteElement.bind('mousewheel', function (event) {
                 var inputValue = parseInt(this.value);
                 if (event.originalEvent.wheelDelta > 0) {
@@ -227,6 +244,9 @@
                 return false;
             });
 
+            /**
+             * Bind the mouse wheel event to the second element
+             */
             secondElement.bind('mousewheel', function (event) {
                 var inputValue = parseInt(this.value);
                 if (event.originalEvent.wheelDelta > 0) {
@@ -254,18 +274,19 @@
                 setInputField(element, hourElement.val(), minuteElement.val(), inputValue);
                 return false;
             });
-            /*
-             * Wrap main plaeholder around timeshift placeholder
+            /**
+             * Wrap main placeholder around timeshift placeholder
              */
             $(this).wrap(mainPlaceholder).wrap(timeshiftPlaceholder);
+
             /**
              * Add legend
              */
             if (settings.legend) {
                 $(this).parent().parent().prepend(legend);
             }
-            /*
-             * Append hour- and minute element to timeshift wrapper
+            /**
+             * Append hour-, minute- and second element to timeshift wrapper
              */
             $(this).parent().append(hourElement);
             $(this).parent().append(minuteElement);
