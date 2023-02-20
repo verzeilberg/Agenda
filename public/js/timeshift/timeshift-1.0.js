@@ -104,7 +104,15 @@
             /**
              * Set start value;
              */
-            element.val(settings.startHour + ':' + settings.startMinutes + ':' + settings.startSeconds);
+
+            if (element.val() === '') {
+                element.val(settings.startHour + ':' + settings.startMinutes + ':' + settings.startSeconds);
+            } else {
+                const timeArray = element.val() .split(":");
+                settings.startHour = timeArray[0];
+                settings.startMinutes = timeArray[1];
+                settings.startSeconds = timeArray[2];
+            }
             /*
              * Create main placeholder
              */
