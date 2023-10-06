@@ -24,8 +24,8 @@ class AgendaAjaxController extends AbstractActionController
     protected $agendaService;
 
     public function __construct(
-        HelperPluginManager $vhm,
-        AgendaService $agendaService
+        $vhm,
+        $agendaService
     )
     {
         $this->viewhelpermanager = $vhm;

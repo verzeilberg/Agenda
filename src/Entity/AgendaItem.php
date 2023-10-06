@@ -95,6 +95,11 @@ class AgendaItem extends UnityOfWork {
      */
     protected $wholeDay;
 
+    public function __construct()
+    {
+    }
+
+
     /**
      * @return mixed
      */

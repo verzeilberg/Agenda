@@ -21,7 +21,7 @@ class AgendaService implements AgendaServiceInterface
     private $config;
 
     public function __construct(
-        AgendaItemRepository $agendaItemRepository,
+        $agendaItemRepository,
         $config
     )
     {

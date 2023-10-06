@@ -37,21 +37,3 @@
         <small class="form-text text-danger"><?php echo $this->formElementErrors($form->get('description')); ?></small>
     <?php } ?>
 </div>
-
-<script>
-    $(document).ready(function () {
-        if ($('input[name="wholeDay"]').is(":checked")) {
-            $('#startEndTime').hide();
-        } else {
-            $('#startEndTime').show();
-        }
-
-        $('input[name="wholeDay"]').change(function () {
-            if ($(this).is(":checked")) {
-                $('#startEndTime').hide();
-            } else {
-                $('#startEndTime').show();
-            }
-        });
-    });
-</script>

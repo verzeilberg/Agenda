@@ -1,339 +1,186 @@
-<?php
-$this->mainMenu()->setActiveItemId('agenda');
-$this->pageBreadcrumbs()->setLayout('beheer');
-$this->pageBreadcrumbs()->setItems([
-    'Beheer' => $this->url('beheer'),
-    'Agenda' => $this->url('beheer/agenda'),
-]);
-?>
-<div class="row">
-    <hgroup id="headAdminTitle" class="col-sm-12 col-md-12 col-lg-12">
-        <h1 id="index">AGENDA BEHEER</h1>
-    </hgroup>
-</div>
-<div class="row">
-    <!-- Breadcrumbs -->
-    <div class="col-lg-12 col-md-12 col-sm-12">
-        <?= $this->pageBreadcrumbs()->render(); ?>
-    </div>
-</div>
-<div class="row navigation mb-3">
-    <div class="col">
-        <a
-                class="btn btn-warning btn-sm"
-                title="Previous month"
-                href="?month=<?= $navigationLinks['preMonth'] ?>&year=<?= $navigationLinks['preYear'] ?>">
-            <i class="fas fa-angle-double-left"></i>
-        </a>
-    </div>
-    <div class="col text-center">
-        <a href="<?= $this->url('beheer/agenda'); ?>" title="Vandaag" class="btn btn-warning btn-sm">Vandaag</a>
-        <div class="btn-group">
-            <button id="agendaLayout" type="button" class="btn btn-warning btn-sm dropdown-toggle"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Day
-            </button>
-            <div class="dropdown-menu bg-warning">
-                <a class="dropdown-item<?= ($layout == 'day' ? ' active' : ''); ?>" data-layout="day"
-                   href="/beheer/agenda/day">Day</a>
-                <a class="dropdown-item<?= ($layout == 'week' ? ' active' : ''); ?>" data-layout="week"
-                   href="/beheer/agenda/week">Week</a>
-                <a class="dropdown-item<?= ($layout == 'month' ? ' active' : ''); ?>" data-layout="month"
-                   href="/beheer/agenda">Month</a>
-            </div>
-        </div>
-        <input type="hidden" name="layout" value="<?= $layout ?>"/>
-    </div>
-    <div class="col text-right">
-        <a
-                class="btn btn-warning btn-sm"
-                title="Next month"
-                href="?month=<?= $navigationLinks['nextMonth'] ?>&year=<?= $navigationLinks['nextYear'] ?>">
-            <i class="fas fa-angle-double-right"></i>
-        </a>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-8 calendarColLeft">
-        <div class="table-responsive calendarContent bg-dark">
-            <table class="table borderless">
-                <tr class="orange">
-                    <th>WK</th>
-                    <?php foreach ($dayLabels AS $dayLabel) { ?>
-                        <th><?= $dayLabel; ?></th>
-                    <?php } ?>
-                </tr>
-                <?php $dayCount = 1; ?>
-                <?php for ($i = 0; $i < $weeksInMonth; $i++) { ?>
-                    <?php
-                    $weekNumber = $this->agendaViewHelper()->getWeekNumber(
-                        $i,
-                        $selectedMonthYear->format('Y'),
-                        $selectedMonthYear->format('m')
-                    );
-                    ?>
-                    <tr class="white">
-                        <th>
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-md-12 col-xl-12">
+            <div class="bg-secondary rounded  p-4">
+                <div class="row">
+                    <hgroup id="headAdminTitle" class="col-sm-12 col-md-12 col-lg-12">
+                        <h1 id="index" class="text-primary">Agenda beheer</h1>
+                    </hgroup>
+                </div>
+                <div class="row navigation mb-3">
+                    <div class="col">
+                        <a
+                                class="btn btn-warning btn-sm"
+                                title="Previous month"
+                                href="?month=<?= $navigationLinks['preMonth'] ?>&year=<?= $navigationLinks['preYear'] ?>">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </div>
+                    <div class="col text-center">
+                        <a href="<?= $this->url('beheer/agenda'); ?>" title="Vandaag" class="btn btn-warning btn-sm">Vandaag</a>
+                        <div class="btn-group">
+                            <button id="agendaLayout" type="button" class="btn btn-warning btn-sm dropdown-toggle"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Day
+                            </button>
+                            <div class="dropdown-menu bg-warning">
+                                <a class="dropdown-item<?= ($layout == 'day' ? ' active' : ''); ?>" data-layout="day"
+                                   href="/beheer/agenda/day">Day</a>
+                                <a class="dropdown-item<?= ($layout == 'week' ? ' active' : ''); ?>" data-layout="week"
+                                   href="/beheer/agenda/week">Week</a>
+                                <a class="dropdown-item<?= ($layout == 'month' ? ' active' : ''); ?>"
+                                   data-layout="month"
+                                   href="/beheer/agenda">Month</a>
+                            </div>
+                        </div>
+                        <input type="hidden" name="layout" value="<?= $layout ?>"/>
+                    </div>
+                    <div class="col text-end">
+                        <a
+                                class="btn btn-warning btn-sm"
+                                title="Next month"
+                                href="?month=<?= $navigationLinks['nextMonth'] ?>&year=<?= $navigationLinks['nextYear'] ?>">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8 calendarColLeft">
+                        <div class="table-responsive calendarContent bg-dark">
+                            <table class="table borderless">
+                                <tr class="orange">
+                                    <th>WK</th>
+                                    <?php foreach ($dayLabels as $dayLabel) { ?>
+                                        <th><?= $dayLabel; ?></th>
+                                    <?php } ?>
+                                </tr>
+                                <?php $dayCount = 1; ?>
+                                <?php for ($i = 0; $i < $weeksInMonth; $i++) { ?>
+                                    <?php
+                                    $weekNumber = $this->agendaViewHelper()->getWeekNumber(
+                                        $selectedMonthYear->format('Y'),
+                                        $selectedMonthYear->format('m'),
+                                        $i
+                                    );
+                                    ?>
+                                    <tr class="white">
+                                        <th>
                             <span
                                     class="weekLink"
                                     data-link="<?= $this->url('beheer/agenda', [
                                             'action' => 'week',
-                                            'day' => $selectedMonthYear->format('Y') . $weekNumber]
+                                            'day' => $selectedMonthYear->format('Y') . $weekNumber
+                                        ]
                                     ); ?>">
                                 <?= $weekNumber; ?>
                             </span>
-                        </th>
-                        <?php
-                        //Create days in a week
+                                        </th>
+                                        <?php
+                                        //Create days in a week
 
-                        for ($j = 1; $j <= 7; $j++) { ?>
-                            <?php
-                            $day = null;
+                                        for ($j = 1; $j <= 7; $j++) { ?>
+                                            <?php
+                                            $day = null;
 
-                            if (($i == 0 && $j >= $firstDayOfTheMonth->format('N')) || ((int)$i > 0)) {
-                                $day = $this->agendaViewHelper()->showDay(
-                                    $selectedMonthYear->format('m'),
-                                    $selectedMonthYear->format('Y'),
-                                    $dayCount
-                                );
-                                $dayCount++;
-                            }
+                                            if (($i == 0 && $j >= $firstDayOfTheMonth->format('N')) || ((int)$i > 0)) {
+                                                $day = $this->agendaViewHelper()->showDay(
+                                                    $selectedMonthYear->format('m'),
+                                                    $selectedMonthYear->format('Y'),
+                                                    $dayCount
+                                                );
+                                                $dayCount++;
+                                            }
 
 
-                            ?>
-                            <?php if (is_object($day)) { ?>
-                                <th>
+                                            ?>
+                                            <?php if (is_object($day)) { ?>
+                                                <th>
                                 <span class="dateLink <?= ($day->format('Ymd') == $currentDate->format('Ymd') ? 'bg-warning text-dark' : '') ?>"
                                       data-date="<?= $day->format('d-m-Y') ?>"
                                       data-link="<?= $this->url('beheer/agenda', [
                                               'action' => 'day',
-                                              'day' => $day->format('Ymd')]
+                                              'day' => $day->format('Ymd')
+                                          ]
                                       ); ?>">
                                 <?= $day->format('j'); ?>
-                                    <?= (!empty($agendaItems)  && count($agendaItems[$day->format('Ymd')]) > 0? '<span class="agendaItem">' .count($agendaItems[$day->format('Ymd')]) . '</span>':''); ?>
+                                <?= (!empty($agendaItems) && count($agendaItems[$day->format('Ymd')]??[]) > 0 ? '<span class="agendaItem">' . count($agendaItems[$day->format('Ymd')]??[]) . '</span>' : ''); ?>
                             </span>
-                                </th>
-                            <?php } else { ?>
-                                <th>&nbsp;</th>
-                            <?php } ?>
+                                                </th>
+                                            <?php } else { ?>
+                                                <th>&nbsp;</th>
+                                            <?php } ?>
+                                            <?php
+                                        }
+                                        ?>
+                                    </tr>
+                                <?php } ?>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-4 calendarColRight">
+                        <div class="dateContent">
+                            <div id="date" class="text-right"><?= $currentDate->format('j'); ?></div>
+                            <div id="day"
+                                 class="text-right">
+                                <?= $this->agendaViewHelper()->getDayLabels('nl', 'long')[$currentDate->format('N')]; ?>
+                            </div>
+                            <div id="month"
+                                 class="text-right">
+                                <?= $this->agendaViewHelper()->getMonthLabels('nl', $currentDate->format('n')); ?>
+                                /<?= $currentDate->format('Y'); ?>
+                            </div>
+                            <div>
+                                <table class="table table-borderless" id="agendaItemsForDay">
+                                    <tbody>
+                                    <?php foreach ($agendaItemsForCurrentDate as $agendaItem) { ?>
+                                        <tr>
+                                            <td style="width:60%; font-family:arial"><?= $this->agendaViewHelper()->shortenTitle($agendaItem->getTitle()); ?></td>
+                                            <td style="width:40%; font-family:arial"
+                                                class="text-right"><?= $agendaItem->getStartTime()->format('H:i:s'); ?>
+                                                - <?= $agendaItem->getEndTime()->format('H:i:s'); ?></td>
+                                        </tr>
+
+                                    <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Button trigger add agenda item modal -->
+                            <button type="button" id="addAgendaItem" class="btn btn-warning addAgendaItemButton" data-bs-toggle="modal" data-bs-target="#addingAgendaItem">
+                                <i class="fas fa-plus-circle"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Add agenda item modal -->
+                <div class="modal fade" id="addingAgendaItem" tabindex="-1" aria-labelledby="addingAgendaItemModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
                             <?php
-                        }
-                        ?>
-                    </tr>
-                <?php } ?>
-            </table>
-        </div>
-    </div>
-    <div class="col-md-4 calendarColRight">
-        <div class="dateContent">
-            <div id="date" class="text-right"><?= $currentDate->format('j'); ?></div>
-            <div id="day"
-                 class="text-right">
-                <?= $this->agendaViewHelper()->getDayLabels('nl', 'long')[$currentDate->format('N')]; ?>
+                            $form->setAttribute('novalidate', 'novalidate');
+                            $form->prepare();
+                            ?>
+                            <?= $this->form()->openTag($form); ?>
+                            <div class="modal-header">
+                                <h2 class="modal-title fs-5 text-primary" id="addingAgendaItemModalLabel">Add agenda item</h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Agenda item form -->
+                                <?= $this->partial('agenda/partial/form.phtml', array('form' => $form)); ?>
+                            </div>
+                            <div class="modal-footer mt-4 pb-4">
+                                <button id="submitAgendaItem" type="submit" class="btn btn-warning">
+                                    <i class="fas fa-plus-circle"></i>
+                                </button>
+                                <button type="button" id="closeAddAgendaItem" class="btn btn-warning" data-bs-dismiss="modal"><i class="fas fa-times-circle"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="month"
-                 class="text-right">
-                <?= $this->agendaViewHelper()->getMonthLabels('nl', $currentDate->format('n')); ?>
-                /<?= $currentDate->format('Y'); ?>
-            </div>
-            <div>
-                <table class="table table-borderless" id="agendaItemsForDay">
-                    <tbody>
-                        <?php foreach ($agendaItemsForCurrentDate as $agendaItem) { ?>
-                    <tr>
-                        <td style="width:60%; font-family:arial"><?= $this->agendaViewHelper()->shortenTitle($agendaItem->getTitle()); ?></td>
-                        <td style="width:40%; font-family:arial" class="text-right"><?= $agendaItem->getStartTime()->format('H:i:s'); ?> - <?= $agendaItem->getEndTime()->format('H:i:s'); ?></td>
-                    </tr>
-
-                    <?php } ?>
-                    </tbody>
-                </table>
-            </div>
-
-            <button id="addAgendaItem" type="button" class="btn btn-warning addAgendaItemButton" data-toggle="modal"
-                    data-target=".bd-example-modal-lg"><i class="fas fa-plus-circle"></i></button>
-        </div>
-
-    </div>
-</div>
-
-<!-- Add agenda item modal -->
-<div id="addAgendaItem" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
-     aria-labelledby="myLargeModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <?php
-            $form->setAttribute('novalidate', 'novalidate');
-            $form->prepare();
-            ?>
-            <?= $this->form()->openTag($form); ?>
-            <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add agenda item</h5>
-            </div>
-            <div class="modal-body">
-                <!-- Agenda item form -->
-                <?= $this->partial('agenda/partial/form.phtml', array('form' => $form)); ?>
-            </div>
-            <div class="modal-footer">
-                <button id="submitAgendaItem" type="submit" class="btn btn-warning">
-                    <i class="fas fa-plus-circle"></i>
-                </button>
-                <button id="closeAddAgendaItem" type="button" class="btn btn-warning" data-dismiss="modal">
-                    <i class="fas fa-times-circle"></i>
-                </button>
-            </div>
-            <?= $this->form()->closeTag($form); ?>
         </div>
     </div>
 </div>
-
-<script>
-
-    function setAgendaLayout() {
-        var buttonText = $('input[name=layout]').val();
-        $('button#agendaLayout').html(buttonText);
-    }
-
-
-    $('.dropdown-menu > a').on("click", function () {
-        var agendaLayout = $(this).data('layout');
-        $('button#agendaLayout').html(agendaLayout);
-        //window.location.href = link;
-    });
-
-    setAgendaLayout();
-
-    $(document).ready(function () {
-
-
-        /**
-         * Submit agenda item
-         */
-        $("button#submitAgendaItem").on("click", function (event) {
-            event.preventDefault();
-            var form = $(this).parent('div').parent('form');
-            var data = form.serializeArray();
-            //Validate form
-            var valide = validateForm(data, form);
-            if (valide) {
-                $.ajax({
-                    type: 'POST',
-                    data: {
-                        data: data
-                    },
-                    url: "<?= $this->url('agendaAjax', ['action' => 'addAgendaItem']); ?>",
-                    async: true,
-                    success: function (data) {
-                        if (data['success'] === true) {
-                            $('.bd-example-modal-lg').modal('hide');
-                        } else {
-                            alert(data['errorMessage']);
-                        }
-                    }
-                });
-            }
-
-        });
-
-        /**
-         * Function to validate form
-         */
-        function validateForm(data, form) {
-            var result = true;
-            $.each(data, function (index, object) {
-                if (typeof ($('[name="' + object.name + '"]').attr('required')) !== 'undefined') {
-                    result = (object.value == '' ? false : true);
-                    if (!result) {
-                        $('[name="' + object.name + '"]').css('border', '2px solid #ffc107');
-                    }
-                }
-            });
-            return result;
-        }
-
-        /**
-         * Init timeshift
-         */
-        $("#startTime, #endTime").timeshift({
-            hourClock: 24
-        });
-
-        /**
-         * Init dateshift
-         */
-        $("input[name=startDate], input[name=endDate]").dateshift({
-            preappelement: '<i class="far fa-calendar-alt"></i>',
-            preapp: 'app',
-            nextButtonText: '<i class="far fa-caret-square-right"></i>',
-            previousButtonText: '<i class="far fa-caret-square-left"></i>',
-            dateFormat: 'dd-mm-yyyy'
-        });
-
-        /**
-         * jQuery function to go to link when selected
-         */
-        $("span.dateLink").on("click", function () {
-            var link = $(this).data('link');
-            var date = $(this).data('date');
-            //If element has class selected go to that day
-            if ($(this).hasClass('selected')) {
-                window.location.href = link;
-            }
-            $('span.dateLink').removeClass('selected');
-            $(this).addClass('selected');
-            getDateData(link);
-            $('input[name=startDate]').val(date);
-            $('input[name=endDate]').val(date);
-        });
-        /**
-         * jQuery function to redirect on click weekLink
-         */
-        $("span.weekLink").on("click", function () {
-            var link = $(this).data('link');
-            window.location.href = link;
-        });
-        /**
-         * Get date data for clicked day
-         * @param date
-         */
-        function getDateData(date) {
-            $.ajax({
-                type: 'POST',
-                data: {
-                    date: date
-                },
-                url: "<?= $this->url('agendaAjax', ['action' => 'getDateData']); ?>",
-                async: true,
-                success: function (data) {
-                    if (data.success === true) {
-                        var day = data.dateData.day;
-                        var dayName = data.dateData.dayName;
-                        var month = data.dateData.month;
-                        var year = data.dateData.year;
-
-
-
-                        $('#date').html(day);
-                        $('#day').html(dayName);
-                        $('#month').html(month + '/' + year);
-                        $('table#agendaItemsForDay tbody').empty();
-                        $.each(data.agendaItems, function( index, item ) {
-                            var startTime = getTimeFormat('hh:mm:ss', item.startTime.date);
-                            var endTime = getTimeFormat('hh:mm:ss', item.endTime.date);
-                            var row = $('<tr>');
-                            row.append($('<td>').html(shortenTitle(item.title)));
-                            row.append($('<td class="text-right">').html(startTime + ' - ' + endTime));
-                            $('table#agendaItemsForDay tbody').append(row);
-                        });
-
-
-                    } else {
-                        alert(data.errorMessage);
-                    }
-                }
-            });
-        }
-
-    });
-</script>

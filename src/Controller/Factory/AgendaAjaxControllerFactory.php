@@ -15,11 +15,12 @@ use Agenda\Service\AgendaService;
 class AgendaAjaxControllerFactory implements FactoryInterface {
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
-        
+
+        $config = $container->get('config');
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $vhm = $container->get('ViewHelperManager');
         $agendaItemRepository = $entityManager->getRepository(AgendaItem::class);
-        $agendaService = new AgendaService($agendaItemRepository);
+        $agendaService = new AgendaService($agendaItemRepository, $config);
         return new AgendaAjaxController(
             $vhm,
             $agendaService

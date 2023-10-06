@@ -65,7 +65,7 @@ class AgendaHelper extends AbstractHelper
      * @return DateTime|string
      * @throws \Exception
      */
-    public function getWeekNumber($dayNumber = 0, $year, $month)
+    public function getWeekNumber($year, $month, $dayNumber = 0)
     {
 
         if ($dayNumber == 0) {
