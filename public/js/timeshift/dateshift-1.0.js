@@ -495,24 +495,18 @@
             /**
              * Create hover function on input element to show/hide calendar
              */
-            $(object).focus(function () {
+            $(object).parent('div.input-group').hover(function () {
                 $(object).parent('div').siblings('div.calendar-placeholder').show();
-
-                /**
-                 * After a hover on input field init a hover on calendar div
-                 */
-                $(object).parent('div').siblings('div.calendar-placeholder').hover(function () {
-                    $(object).parent('div').siblings('div.calendar-placeholder').show();
-                });
             });
+
 
             /**
-             * On mouse out calendar hide calendar
+             * After a hover on input field init a hover on calendar div
              */
-            $(object).parent('div').mouseout(function () {
+            $(object).parent('div').parent('div.dateshift-placeholder').mouseleave(function () {
                 $(object).parent('div').siblings('div.calendar-placeholder').hide();
-
             });
+
 
 
         });
