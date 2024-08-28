@@ -1,3 +1,7 @@
+div.dateshift-placeholder {
+    display:inline-block;
+}
+
 div.calendar-placeholder {
     border-radius: 6px;
     border: 1px solid #cccccc;
