@@ -1,0 +1,23 @@
+<?php
+$fieldset = $form->get('agenda-import');
+$title = $fieldset->get('title');
+?>
+<div class="row mb-2">
+    <div class="col-sm-12 col-md-12 col-xl-12">
+        <?= $this->formLabel($title) ?>
+        <div class="input-group mb-2 mt-2">
+            <?= $this->formElement($title); ?>
+            <small class="form-text text-danger"> <?= $this->formElementErrors()->render($title) ?></small>
+        </div>
+    </div>
+    <?php
+    $color = $fieldset->get('color');
+    ?>
+    <div class="col-sm-2 col-md-2 col-xl-2">
+        <?= $this->formLabel($color) ?>
+        <div class="input-group mb-2 mt-2">
+            <?= $this->formElement($color); ?>
+            <small class="form-text text-danger"> <?= $this->formElementErrors()->render($color) ?></small>
+        </div>
+    </div>
+</div>

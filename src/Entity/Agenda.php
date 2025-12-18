@@ -9,7 +9,7 @@ use Application\Model\UnityOfWork;
 
 /**
  * This class represents a agenda.
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Agenda\Repository\AgendaRepository")
  * @ORM\Table(name="agenda")
  */
 class Agenda extends UnityOfWork {
@@ -21,40 +21,74 @@ class Agenda extends UnityOfWork {
     protected $id;
 
     /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     * @Annotation\Options({
-     * "label": "Description",
-     * "label_attributes": {"class": "col form-control-label"}
-     * })
-     * @Annotation\Attributes({"class":"form-control", "placeholder":"title"})
+     * @ORM\Column(name="title", type="string", length=255, nullable=false)
      */
     protected $title;
 
     /**
-     * @ORM\Column(name="whole_day", type="integer", length=1,  nullable=true)
-     * @Annotation\Type("Laminas\Form\Element\Checkbox")
-     * @Annotation\Options({
-     * "label": "Gehele dag",
-     * "label_attributes": {"class": "col-sm-1 col-md-1 col-lg-1 form-control-label"},
-     * "value_options":{
-     * "1":"Publiek."
-     * }
-     * })
-     * @Annotation\Attributes({"class":"form-control"})
+     * @ORM\Column(name="color", type="string", length=6, nullable=false)
      */
-    protected $public;
+    protected $color;
 
     /**
-     * Many Users have Many Groups.
-     * @ORM\ManyToMany(targetEntity="User\Entity\User")
-     * @ORM\JoinTable(name="agendas_users",
-     *      joinColumns={@ORM\JoinColumn(name="agenda_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
-     *      )
+     * @param $id
+     * @param $title
+     * @param $color
      */
-    private $users;
+    public function __construct()
+    {
 
-    public function __construct() {
-        $this->users = new ArrayCollection();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param mixed $color
+     */
+    public function setColor($color): void
+    {
+
+        $color = str_replace("#", "", $color);
+        $this->color = $color;
+    }
+
+
 }

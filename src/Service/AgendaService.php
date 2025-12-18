@@ -2,31 +2,90 @@
 
 namespace Agenda\Service;
 
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Agenda\Entity\Agenda;
+use Agenda\Repository\AgendaRepository;
 use DateTime;
 use Doctrine\Laminas\Hydrator\DoctrineObject as DoctrineHydrator;
 use Agenda\Entity\AgendaItem;
 use Agenda\Repository\AgendaItemRepository;
 use Laminas\Form\Annotation\AnnotationBuilder;
+use Laminas\Paginator\Paginator;
+use om\IcalParser;
 
-class AgendaService implements AgendaServiceInterface
+class AgendaService
 {
+
+    protected $entityManager;
 
     /**
      * @var AgendaItemRepository
      */
     public $agendaItemRepository;
+
+    /**
+     * @var AgendaRepository
+     */
+    public $agendaRepository;
+
+
     /**
      * @var config
      */
     private $config;
 
     public function __construct(
+        $entityManager,
         $agendaItemRepository,
+        $agendaRepository,
         $config
     )
     {
+        $this->entityManager        = $entityManager;
         $this->agendaItemRepository = $agendaItemRepository;
-        $this->config = $config;
+        $this->agendaRepository     = $agendaRepository;
+        $this->config               = $config;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAgendas() {
+        $qb = $this->entityManager->getRepository(Agenda::class)->createQueryBuilder('a')
+            ->where('a.deleted = 0')
+            ->orderBy('a.title', 'DESC');
+        return $qb->getQuery();
+    }
+
+    /**
+     * @param $searchString
+     * @return mixed
+     */
+    public function searchAgendas($searchString)
+    {
+        $qb = $this->entityManager->getRepository(Agenda::class)->createQueryBuilder('a');
+        $orX = $qb->expr()->orX();
+        $orX->add($qb->expr()->like('a.title', $qb->expr()->literal("%$searchString%")));
+        $qb->where($orX);
+        $qb->andWhere('a.deleted = 0');
+        $qb->orderBy('a.title', 'DESC');
+        return $qb->getQuery();
+    }
+
+    /**
+     * @param $query
+     * @param $currentPage
+     * @param $itemsPerPage
+     * @return Paginator
+     */
+    public function getItemsForPagination($query, $currentPage = 1, $itemsPerPage = 10): Paginator
+    {
+        $adapter = new DoctrineAdapter(new ORMPaginator($query, false));
+        $paginator = new Paginator($adapter);
+        $paginator->setDefaultItemCountPerPage($itemsPerPage);
+        $paginator->setCurrentPageNumber($currentPage);
+        return $paginator;
     }
 
     /**
@@ -269,6 +328,32 @@ class AgendaService implements AgendaServiceInterface
         }
 
         return $result;
+    }
+
+    public function importAgendaItems($icalUrl)
+    {
+        $icsData = file_get_contents($icalUrl);
+
+        if ($icsData === false) {
+            die('Failed to fetch iCalendar file from URL.');
+        }
+        $cal = new IcalParser();
+        $results = $cal->parseFile($icalUrl);
+
+        foreach ($cal->getEvents()->sorted() as $event) {
+
+
+            $agendaItem = new AgendaItem();
+            $agendaItem->setTitle($event['SUMMARY']);
+            $agendaItem->setDescription($event['DESCRIPTION']);
+            $agendaItem->setStartDate($event['DTSTART']);
+            $agendaItem->setStartTime($event['DTSTART']->format('h:i:s'));
+            $agendaItem->setEndDate($event['DTEND']);
+            $agendaItem->setEndTime($event['DTEND']->format('h:i:s'));
+            $this->agendaItemRepository->storeAgendaItem($agendaItem);
+        }
+
+        $this->agendaItemRepository->flushAway();
     }
 
 }

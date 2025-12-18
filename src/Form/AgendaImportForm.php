@@ -12,20 +12,20 @@ use Laminas\Form\Form;
 use UploadImages\Form\UploadImageFieldset;
 
 
-class AgendaForm extends Form
+class AgendaImportForm extends Form
 {
 
     public function __construct(ObjectManager $objectManager)
     {
-        parent::__construct('agenda-form');
+        parent::__construct('import-agenda-form');
 
         // The form will hydrate an object of type "Blog"
         $this->setHydrator(new DoctrineHydrator($objectManager));
 
         // Add the Blog fieldset, and set it as the base fieldset
-        $agendaFieldset = new AgendaFieldset($objectManager);
-        $agendaFieldset->setUseAsBaseFieldset(true);
-        $this->add($agendaFieldset);
+        $agendaImportFieldset = new AgendaImportFieldset($objectManager);
+        $agendaImportFieldset->setUseAsBaseFieldset(true);
+        $this->add($agendaImportFieldset);
 
 
         // Add the Submit button

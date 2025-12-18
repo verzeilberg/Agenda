@@ -1,0 +1,14 @@
+<?php
+$fieldset = $form->get('agenda-import');
+$url = $fieldset->get('url');
+?>
+<div class="row mb-2">
+    <div class="col-sm-12 col-md-12 col-xl-12">
+        <p>Je kunt een agenda toevoegen met de iCal-indeling.</p>
+        <?= $this->formLabel($url) ?>
+        <div class="input-group mb-2 mt-2">
+            <?= $this->formText($url); ?>
+            <small class="form-text text-danger"> <?= $this->formElementErrors()->render($url) ?></small>
+        </div>
+    </div>
+</div>

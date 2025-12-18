@@ -74,15 +74,22 @@ class AgendaItemRepository extends EntityRepository
      * @return bool
      * @throws OptimisticLockException
      */
-    public function storeAgendaItem($agendaItem)
+    public function storeAgendaItem($agendaItem): bool
     {
         try {
+            $currentDate = new \DateTime('now');
+            $agendaItem->setDateCreated($currentDate);
             $this->getEntityManager()->persist($agendaItem);
-            $this->getEntityManager()->flush();
+
             return true;
         } catch (\Doctrine\DBAL\DBALException $e) {
             return false;
         }
+    }
+
+    public function flushAway()
+    {
+        $this->getEntityManager()->flush();
     }
 
     /**

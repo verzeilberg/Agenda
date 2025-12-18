@@ -2,6 +2,7 @@
 
 namespace Agenda\Controller\Factory;
 
+use Agenda\Entity\Agenda;
 use Agenda\Entity\AgendaItem;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -21,11 +22,13 @@ class AgendaControllerFactory implements FactoryInterface {
         $entityManager = $container->get('doctrine.entitymanager.orm_default');
         $vhm = $container->get('ViewHelperManager');
         $agendaItemRepository = $entityManager->getRepository(AgendaItem::class);
-        $agendaService = new AgendaService($agendaItemRepository, $config);
+        $agendaRepository = $entityManager->getRepository(Agenda::class);
+        $agendaService = new AgendaService($entityManager, $agendaItemRepository, $agendaRepository,  $config);
 
         return new AgendaController(
             $vhm,
-            $agendaService
+            $agendaService,
+            $entityManager,
         );
     }
 

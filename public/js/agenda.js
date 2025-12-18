@@ -67,6 +67,7 @@ setAgendaLayout();
 
 $(document).ready(function () {
 
+    
 
     /**
      * Submit agenda item

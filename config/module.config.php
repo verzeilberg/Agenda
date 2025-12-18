@@ -18,11 +18,6 @@ return [
             'agendaAjax' => Controller\AgendaAjaxController::class,
         ],
     ],
-    'service_manager' => [
-        'invokables' => [
-            Agenda\Service\AgendaServiceInterface::class => Agenda\Service\AgendaService::class
-        ],
-    ],
     'view_helpers' => [
         'factories' => [
             View\Helper\AgendaHelper::class => View\Helper\Factory\AgendaViewHelperFactory::class,
